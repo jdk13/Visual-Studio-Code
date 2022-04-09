@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class VisiCalc {
 	
+	
 	static Grid gr = new Grid(10, 7);
 	static boolean checkColumn = false;
 	boolean CheckNum = false;
@@ -112,7 +113,7 @@ public class VisiCalc {
 			checkCol(case1);
 			//if any of the conditions are met, then it will return true
 			//and cellloc will be the index
-			System.out.println(case1);
+			//System.out.println(case1);
 			if (checkColumn) {
 				//if the checkColumn was returned true
 				// it will then check the row
