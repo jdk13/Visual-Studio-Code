@@ -1,7 +1,7 @@
 
 public class Grid {
 	
-	Cell[][] spreadsheet;
+	static Cell[][] spreadsheet;
 	
 	public Grid(int width, int length) {
 		spreadsheet = new Cell[width][length];
@@ -42,7 +42,13 @@ public class Grid {
 				if (spreadsheet[i][k] == null) {
 					System.out.print("         |");
 				} else {				    
-					System.out.print(spreadsheet[i][k].input);
+					System.out.print(spreadsheet[i][k].cellNum);
+					String f2 = spreadsheet[i][k].cellNum.toString();
+					
+					if(spreadsheet[i][k].finalresult.length() < 10){
+						
+
+					}
 					
 					
 				}
@@ -56,12 +62,23 @@ public class Grid {
 		
 
 	}
-	public static void printDash(int n){
+	public void printDash(int n){
 	    if(n > 0){
 	        System.out.print("-");
 	        printDash(n-1);
 	    }
 	    
+	}
+	public static void assignIntCell(int cellLoc1, int cellLoc2, int input){
+		spreadsheet[cellLoc1][cellLoc2] = new Cell();
+		spreadsheet[cellLoc1][cellLoc2].cellNum = input;
+
+
+	}
+	public static void assignStringCell(int cellLoc1, int cellLoc2, String input) {
+		spreadsheet[cellLoc2][cellLoc1] = new Cell();
+		spreadsheet[cellLoc2][cellLoc1].input = input;
+		
 	}
 	
 	/*public static void createNewCell(int column, int row) {
