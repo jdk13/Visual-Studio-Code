@@ -37,6 +37,7 @@ public class VisiCalc {
 			}
 			else  {
 				cellAssignment(answer);
+				checkColumn = false;
 				if(!returnedAssignment) {
 					System.out.println(answer);
 				}
@@ -137,6 +138,7 @@ public class VisiCalc {
 				}
 				
 			}
+			
 				
 			}
 			return returnedAssignment;
@@ -181,6 +183,8 @@ public class VisiCalc {
 		} else if(case2.equalsIgnoreCase("G")){
 			cellLoc2 = 6;
 			checkColumn = true;
+		} else{
+			checkColumn = false;
 		}
 		return checkColumn;
 	}
