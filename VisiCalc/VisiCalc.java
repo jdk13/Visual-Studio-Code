@@ -104,6 +104,7 @@ public class VisiCalc {
 			String case1 = celltest.substring(0,1);
 			//splits the letter
 			String case2 = celltest.substring(1);
+			System.out.println(case2);
 			//splits the number just in case its 10
 			/*
 			A4 = 3454
