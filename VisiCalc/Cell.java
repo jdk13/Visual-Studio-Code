@@ -1,4 +1,3 @@
-
 public class Cell {
 	int cellNum;
 	String cellText;

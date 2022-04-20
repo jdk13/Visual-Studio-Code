@@ -41,19 +41,27 @@ public class Grid {
 			for (int k = 0; k < 7; k++) {
 				if (spreadsheet[i][k] == null) {
 					System.out.print("         |");
-				} else {				    
-					System.out.print(spreadsheet[i][k].finalresult);
+				} else {	
 					
-					
-					if(spreadsheet[i][k].finalresult.length() < 9){
-						int f = 9 - spreadsheet[i][k].finalresult.length();
+					if (spreadsheet[i][k].finalresult.length() < 10) {
+						System.out.print(spreadsheet[i][k].finalresult);
 						
-						for ( int l = 0; l < f; l++){
-							System.out.print(" ");
+						
+						if(spreadsheet[i][k].finalresult.length() < 9){
+							int f = 9 - spreadsheet[i][k].finalresult.length();
+							
+							for ( int l = 0; l < f; l++){
+								System.out.print(" ");
+							}
+
+
 						}
-
-
 					}
+					
+					else {
+						System.out.print(spreadsheet[i][k].finalresult.substring(0,8));
+					}
+					
 					System.out.print("|");
 					
 					
@@ -77,13 +85,12 @@ public class Grid {
 	}
 	public static void assignIntCell(int cellLoc1, int cellLoc2, int input){
 		spreadsheet[cellLoc1-1][cellLoc2] = new Cell(input);
-		System.out.println(spreadsheet[cellLoc1-1][cellLoc2].cellNum);
 
 
 	}
 	public static void assignStringCell(int cellLoc1, int cellLoc2, String input) {
 		spreadsheet[cellLoc2][cellLoc1] = new Cell(input);
-		spreadsheet[cellLoc2][cellLoc1].input = input;
+		
 		
 	}
 	
