@@ -59,7 +59,7 @@ public class Grid {
 					}
 					
 					else {
-						System.out.print(spreadsheet[i][k].finalresult.substring(0,8));
+						System.out.print(spreadsheet[i][k].finalresult.substring(0,9));
 					}
 					
 					System.out.print("|");
@@ -89,7 +89,7 @@ public class Grid {
 
 	}
 	public static void assignStringCell(int cellLoc1, int cellLoc2, String input) {
-		spreadsheet[cellLoc1-1][cellLoc2] = new Cell(input);
+		spreadsheet[cellLoc1-1][cellLoc2] = new TextCell(input);
 		
 		
 	}

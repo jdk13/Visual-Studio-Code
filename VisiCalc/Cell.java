@@ -9,12 +9,7 @@ public class Cell {
 		
 		
 	}
-	public Cell(String cellText){
-		this.cellText = cellText;
-		finalresult = cellText;
-		
-	}
-	String input;
+	
 	public String toString(){
 		return cellNum + "";
 	}

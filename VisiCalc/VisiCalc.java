@@ -58,16 +58,14 @@ public class VisiCalc {
 		//ok so here we are taking whatever the input is and checking if we can assign it
 		if (testCase.contains(" ")){
 			testcmd = testCase.split(" ");
-			try {
+
 				if (testcmd.length > 3){
-					for (int k = 3; k < testcmd.length - 1; k++){
+					for (int k = 3; k < testcmd.length; k++){
 						String temp = testcmd[k];
-						testcmd[2] = testcmd[2] + temp;
+						testcmd[2] = testcmd[2] + " " +  temp;
 					}
 				}
-			} catch (NullPointerException e) {
-				return returnedAssignment = false;
-					}
+			
 			//System.out.println(testcmd[1]);
 			//System.out.println(testcmd[2]);
 			
@@ -96,7 +94,7 @@ public class VisiCalc {
 						}
 						else{
 							if(testcmd[2].indexOf("\"") == 0 && testcmd[2].endsWith("\"")){
-								Grid.assignStringCell(cellLoc1, cellLoc2, testcmd[2].substring(1, testcmd[2].length()-2));
+								Grid.assignStringCell(cellLoc1, cellLoc2, testcmd[2].substring(1, testcmd[2].length()-1));
 								returnedAssignment = true;
 							}
 
