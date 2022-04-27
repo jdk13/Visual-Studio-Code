@@ -89,9 +89,12 @@ public class Grid {
 
 	}
 	public static void assignStringCell(int cellLoc1, int cellLoc2, String input) {
-		spreadsheet[cellLoc2][cellLoc1] = new Cell(input);
+		spreadsheet[cellLoc1-1][cellLoc2] = new Cell(input);
 		
 		
+	}
+	public static String getCell(int cellLoc1, int cellLoc2) {
+		return spreadsheet[cellLoc1-1][cellLoc2].finalresult;
 	}
 	
 	/*public static void createNewCell(int column, int row) {

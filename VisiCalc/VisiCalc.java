@@ -17,6 +17,7 @@ public class VisiCalc {
 	static int givenvalue;
 	static boolean intString;
 	static String[] testcmd;
+	static boolean validCell = false;
 
 	static boolean returnedAssignment = false;
 
@@ -27,6 +28,7 @@ public class VisiCalc {
 		
 		// returning same input
 		while (!quit) {
+			
 			String answer = input.nextLine();
 			if (answer.equalsIgnoreCase("print")) {
 				gr.printGrid();
@@ -75,18 +77,51 @@ public class VisiCalc {
 				
 				
 			}*/
-			System.out.println("");
-			//if the 2nd element is an =, then we can run these tests
-			if(testcmd[1].equals("=")) {
-				checkCell(testcmd[0], testcmd[2]);
-				//this will check if the requested cell location and its contents are valid
-				
+			if(testcmd.length == 1) {
+				checkCell(testcmd[0]);
+				if(validCell) {
+					System.out.println(Grid.getCell(cellLoc1, cellLoc2));					
+				}
 			}
-			else{
-				returnedAssignment = false;
-				return returnedAssignment;
+			//if the 2nd element is an =, then we can run these tests
+			if(testcmd.length > 1) {
+				if(testcmd[1].equals("=")) {
+					checkCell(testcmd[0]);
+					//this will check if the requested cell location and its contents are valid
+					if(validCell){
+						intorString(testcmd[2]);
+						if (intString){
+							Grid.assignIntCell(cellLoc1, cellLoc2, givenvalue);
+							returnedAssignment = true;
+						}
+						else{
+							if(testcmd[2].indexOf("\"") == 0 && testcmd[2].endsWith("\"")){
+								Grid.assignStringCell(cellLoc1, cellLoc2, testcmd[2].substring(1, testcmd[2].length()-2));
+								returnedAssignment = true;
+							}
+
+							returnedAssignment = true;
+
+						}
+						
+					}
+					else{
+						returnedAssignment = false;
+						return returnedAssignment;
+					}
+				}
+				else{
+					returnedAssignment = false;
+					return returnedAssignment;
+				}
 			}
 			
+		}
+		else{
+			checkCell(testCase);
+				if(validCell) {
+					System.out.println(Grid.getCell(cellLoc1, cellLoc2));					
+				}
 		}
 		//this effectively splits everything by spaces into arrays
 		//and this for loop effectively mashes every element past the third element 
@@ -98,13 +133,12 @@ public class VisiCalc {
 		
 	}
 	
-	public static boolean checkCell(String celltest, String celltest2){ //celltest is loc eg A3 or C4
+	public static boolean checkCell(String celltest){ //celltest is loc eg A3 or C4
 		//cell test 2 is whatever comes after
 		if(celltest.length() < 4) {
 			String case1 = celltest.substring(0,1);
 			//splits the letter
 			String case2 = celltest.substring(1);
-			System.out.println(case2);
 			//splits the number just in case its 10
 			/*
 			A4 = 3454
@@ -120,29 +154,24 @@ public class VisiCalc {
 				//if the checkColumn was returned true
 				// it will then check the row
 				checkRow(case2);
-				if(checkR && cellLoc1 <= 10 && cellLoc1 != 0){
-					intorString(celltest2);
-					if (intString){
-						Grid.assignIntCell(cellLoc1, cellLoc2, givenvalue);
-						returnedAssignment = true;
-					}
-					else{
-
-						returnedAssignment = true;
-
-					}
-					
+				if(checkColumn && checkR) {
+					validCell = true;
+					return validCell;
 				}
 				else{
-					returnedAssignment = false;
-					return returnedAssignment;
+					validCell = false;
 				}
 				
+				
+			}
+			else{
+				validCell = false;
 			}
 			
 				
 			}
-			return returnedAssignment;
+		
+			return validCell;
 
 		}
 	
@@ -155,6 +184,7 @@ public class VisiCalc {
 			return intString;
 		}
 		catch(final NumberFormatException e){
+			
 			intString = false;
 			return intString;
 		}
@@ -186,17 +216,27 @@ public class VisiCalc {
 			checkColumn = true;
 		} else{
 			checkColumn = false;
+			validCell = false;
+			return checkColumn;
 		}
 		return checkColumn;
 	}
 	public static boolean checkRow(String rowTest) {
 		try {
 			cellLoc1 = Integer.parseInt(rowTest);
-			checkR = true;
+			if(cellLoc1 == 0 || cellLoc1 > 10){
+				checkR = false;
+				return checkR;
+			}
+			else{
+				checkR = true;
+			}
+			
 			return checkR;
 		}
 		catch(final NumberFormatException catcherror){
 			checkR = false;
+			validCell = false;
 			return checkR;
 		}
 		
