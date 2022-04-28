@@ -14,7 +14,7 @@ public class VisiCalc {
 	static boolean checkR = false;
 	static int cellLoc1;
 	static int cellLoc2;
-	static int givenvalue;
+	static double givenvalue;
 	static boolean intString;
 	static String[] testcmd;
 	static boolean validCell = false;
@@ -28,7 +28,7 @@ public class VisiCalc {
 		
 		// returning same input
 		while (!quit) {
-			
+			System.out.print("Enter:  ");
 			String answer = input.nextLine();
 			if (answer.equalsIgnoreCase("print")) {
 				gr.printGrid();
@@ -38,12 +38,16 @@ public class VisiCalc {
 				System.out.println("You have exited");
 			}
 			else  {
-				cellAssignment(answer);
+				validCell = false;
 				checkColumn = false;
-				if(!returnedAssignment) {
+				cellAssignment(answer);
+				
+				if(returnedAssignment) {
+					System.out.println("");
 					System.out.println(answer);
+					System.out.println("");
 				}
-				System.out.println("");
+				
 				
 			} 
 				
@@ -56,16 +60,25 @@ public class VisiCalc {
 	
 	public static boolean cellAssignment(String testCase) {
 		//ok so here we are taking whatever the input is and checking if we can assign it
-		if (testCase.contains(" ")){
+
 			testcmd = testCase.split(" ");
 
-				if (testcmd.length > 3){
-					for (int k = 3; k < testcmd.length; k++){
-						String temp = testcmd[k];
-						testcmd[2] = testcmd[2] + " " +  temp;
-					}
+			if (testcmd.length > 3){
+				for (int k = 3; k < testcmd.length; k++){
+					String temp = testcmd[k];
+					testcmd[2] = testcmd[2] + " " +  temp;
 				}
-			
+			}
+			if(testcmd.length == 1) {
+				checkCell(testcmd[0]);
+				if(validCell) {
+					try {
+						System.out.println(Grid.getCell(cellLoc1, cellLoc2));
+					} catch (NullPointerException e) {
+						System.out.println("There's nothing here!");
+					}					
+				}
+			}
 			//System.out.println(testcmd[1]);
 			//System.out.println(testcmd[2]);
 			
@@ -75,12 +88,7 @@ public class VisiCalc {
 				
 				
 			}*/
-			if(testcmd.length == 1) {
-				checkCell(testcmd[0]);
-				if(validCell) {
-					System.out.println(Grid.getCell(cellLoc1, cellLoc2));					
-				}
-			}
+			
 			//if the 2nd element is an =, then we can run these tests
 			if(testcmd.length > 1) {
 				if(testcmd[1].equals("=")) {
@@ -92,13 +100,16 @@ public class VisiCalc {
 							Grid.assignIntCell(cellLoc1, cellLoc2, givenvalue);
 							returnedAssignment = true;
 						}
-						else{
-							if(testcmd[2].indexOf("\"") == 0 && testcmd[2].endsWith("\"")){
-								Grid.assignStringCell(cellLoc1, cellLoc2, testcmd[2].substring(1, testcmd[2].length()-1));
-								returnedAssignment = true;
-							}
-
+						else if(checkifDate(testcmd[2])){
+							Grid.assignDateCell(cellLoc1, cellLoc2, testcmd[2]);
+							return returnedAssignment = true;
+						}
+						else if(testcmd[2].indexOf("\"") == 0 && testcmd[2].endsWith("\"")){
+							Grid.assignStringCell(cellLoc1, cellLoc2, testcmd[2].substring(1, testcmd[2].length()-1));
 							returnedAssignment = true;
+						}
+						else{
+							returnedAssignment = false;
 
 						}
 						
@@ -113,24 +124,41 @@ public class VisiCalc {
 					return returnedAssignment;
 				}
 			}
-			
+			return returnedAssignment = false;
 		}
-		else{
-			checkCell(testCase);
-				if(validCell) {
-					System.out.println(Grid.getCell(cellLoc1, cellLoc2));					
-				}
-		}
+		
+		
 		//this effectively splits everything by spaces into arrays
 		//and this for loop effectively mashes every element past the third element 
 		//into the third element
 		
 		
 		
-		return returnedAssignment;
 		
-	}
+		
 	
+	
+	public static boolean checkifDate(String string) {
+		if(string.contains("/")){
+			if(string.indexOf("/") == 2 && string.indexOf("/", 3) == 5){
+				int monthTest = Integer.parseInt(string.substring(0, 2));
+				if( monthTest <= 12 && monthTest > 0){
+					int dayTest = Integer.parseInt(string.substring(4, 6));
+					if (dayTest <= 31 && dayTest > 0){
+						int yearTest = Integer.parseInt(string.substring(7, 11));
+						
+					}
+					return true;
+				}
+				return true;
+			}
+			return false;
+		}
+		else{
+			return false;
+		}
+	}
+
 	public static boolean checkCell(String celltest){ //celltest is loc eg A3 or C4
 		//cell test 2 is whatever comes after
 		if(celltest.length() < 4) {
@@ -177,7 +205,7 @@ public class VisiCalc {
 	public static boolean intorString(String intorStringtest) {
 		//this will check if the given string can qualify as an int
 		try {
-			givenvalue = Integer.parseInt(intorStringtest);
+			givenvalue = Double.parseDouble(intorStringtest);
 			intString = true;
 			return intString;
 		}

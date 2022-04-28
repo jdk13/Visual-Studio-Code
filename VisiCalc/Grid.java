@@ -83,15 +83,22 @@ public class Grid {
 	    }
 	    
 	}
-	public static void assignIntCell(int cellLoc1, int cellLoc2, int input){
-		spreadsheet[cellLoc1-1][cellLoc2] = new Cell(input);
-
-
+	public static void assignIntCell(int cellLoc1, int cellLoc2, double givenvalue){
+		String thing = Cell.convertToInt(givenvalue);
+		if(thing.contains(".")){
+			spreadsheet[cellLoc1-1][cellLoc2] = new Cell(givenvalue);
+		}
+		else{
+			spreadsheet[cellLoc1-1][cellLoc2] = new Cell(Integer.parseInt(thing));
+		}
+		
 	}
 	public static void assignStringCell(int cellLoc1, int cellLoc2, String input) {
-		spreadsheet[cellLoc1-1][cellLoc2] = new TextCell(input);
 		
-		
+		spreadsheet[cellLoc1-1][cellLoc2] = new TextCell(input);	
+	}
+	public static void assignDateCell(int cellLoc1, int cellLoc2, String input) {
+		spreadsheet[cellLoc1-1][cellLoc2] = new DateCell(input);	
 	}
 	public static String getCell(int cellLoc1, int cellLoc2) {
 		return spreadsheet[cellLoc1-1][cellLoc2].finalresult;
