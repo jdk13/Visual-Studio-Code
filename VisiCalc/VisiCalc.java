@@ -33,6 +33,13 @@ public class VisiCalc {
 			if (answer.equalsIgnoreCase("print")) {
 				gr.printGrid();
 				
+			} else if(answer.equalsIgnoreCase("clear")) {
+				for (int i = 0; i < 10; i++){
+					for(int k = 0; k < 7; k++){
+						Grid.spreadsheet[i][k] = null;
+					}
+				}
+				System.out.println("Cleared!");
 			} else if( answer.equalsIgnoreCase("Quit")) {
 				quit = true;
 				System.out.println("You have exited");
@@ -40,9 +47,10 @@ public class VisiCalc {
 			else  {
 				validCell = false;
 				checkColumn = false;
+				returnedAssignment = false;
 				cellAssignment(answer);
-				
-				if(returnedAssignment) {
+				//a better name for the method should have been "AnswerChecker"
+				if(!returnedAssignment) {
 					System.out.println("");
 					System.out.println(answer);
 					System.out.println("");
@@ -73,9 +81,15 @@ public class VisiCalc {
 				checkCell(testcmd[0]);
 				if(validCell) {
 					try {
+						System.out.println("");
 						System.out.println(Grid.getCell(cellLoc1, cellLoc2));
+						System.out.println("");
+						return returnedAssignment = true;
 					} catch (NullPointerException e) {
+						System.out.println("");
 						System.out.println("There's nothing here!");
+						System.out.println("");
+						return returnedAssignment = true;
 					}					
 				}
 			}
@@ -98,7 +112,7 @@ public class VisiCalc {
 						intorString(testcmd[2]);
 						if (intString){
 							Grid.assignIntCell(cellLoc1, cellLoc2, givenvalue);
-							returnedAssignment = true;
+							return returnedAssignment = true;
 						}
 						else if(checkifDate(testcmd[2])){
 							Grid.assignDateCell(cellLoc1, cellLoc2, testcmd[2]);
@@ -106,10 +120,10 @@ public class VisiCalc {
 						}
 						else if(testcmd[2].indexOf("\"") == 0 && testcmd[2].endsWith("\"")){
 							Grid.assignStringCell(cellLoc1, cellLoc2, testcmd[2].substring(1, testcmd[2].length()-1));
-							returnedAssignment = true;
+							return returnedAssignment = true;
 						}
 						else{
-							returnedAssignment = false;
+							return returnedAssignment = false;
 
 						}
 						
@@ -118,6 +132,15 @@ public class VisiCalc {
 						returnedAssignment = false;
 						return returnedAssignment;
 					}
+				}
+				else if(testcmd.length == 2){
+					checkCell(testcmd[1]);
+					if(validCell && testcmd[0].equalsIgnoreCase("clear")){
+						Grid.spreadsheet[cellLoc1-1][cellLoc2] = null;
+						System.out.println("Cleared!");
+						return returnedAssignment = true;
+					}
+
 				}
 				else{
 					returnedAssignment = false;
@@ -143,16 +166,28 @@ public class VisiCalc {
 			if(string.indexOf("/") == 2 && string.indexOf("/", 3) == 5){
 				int monthTest = Integer.parseInt(string.substring(0, 2));
 				if( monthTest <= 12 && monthTest > 0){
-					int dayTest = Integer.parseInt(string.substring(4, 6));
+					int dayTest = Integer.parseInt(string.substring(3, 5));
 					if (dayTest <= 31 && dayTest > 0){
-						int yearTest = Integer.parseInt(string.substring(7, 11));
-						
+						int yearTest = Integer.parseInt(string.substring(6, 10));
+						if(yearTest >= 1000 && yearTest <= 9999){
+							return true;
+						}
+						else{
+							return false;
+						}
 					}
-					return true;
+					else{
+						return false;
+					}
 				}
-				return true;
+				else{
+					return false;
+				}
 			}
-			return false;
+			else{
+				return false;
+
+			}
 		}
 		else{
 			return false;
