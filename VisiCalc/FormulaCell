@@ -1,5 +1,0 @@
-public class FormulaCell extends Cell{
-    public FormulaCell(String input){
-        
-    }
-}

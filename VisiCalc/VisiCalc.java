@@ -9,9 +9,8 @@ public class VisiCalc {
 	
 	
 	static Grid gr = new Grid(10, 7);
-	static boolean checkColumn = false;
+
 	boolean CheckNum = false;
-	static boolean checkR = false;
 	static int cellLoc1;
 	static int cellLoc2;
 	static double givenvalue;
@@ -19,6 +18,7 @@ public class VisiCalc {
 	static String[] testcmd;
 	static boolean validCell = false;
 
+	
 	static boolean returnedAssignment = false;
 
 	public static void main(String args[]) {
@@ -46,7 +46,6 @@ public class VisiCalc {
 			}
 			else  {
 				validCell = false;
-				checkColumn = false;
 				returnedAssignment = false;
 				cellAssignment(answer);
 				//a better name for the method should have been "AnswerChecker"
@@ -106,11 +105,18 @@ public class VisiCalc {
 			//if the 2nd element is an =, then we can run these tests
 			if(testcmd.length > 1) {
 				if(testcmd[1].equals("=")) {
+					
 					checkCell(testcmd[0]);
 					//this will check if the requested cell location and its contents are valid
 					if(validCell){
-						intorString(testcmd[2]);
-						if (intString){
+						String[] formulaInput = testcmd[3].split(" ");
+
+						//check if formula cell first
+						if(isItAFormula(formulaInput)) {
+							checkCell(testcmd[0]);
+							Grid.assignFormulaCell(cellLoc1, cellLoc2, formulaInput);
+						}
+						else if (intorString(testcmd[2])){
 							Grid.assignIntCell(cellLoc1, cellLoc2, givenvalue);
 							return returnedAssignment = true;
 						}
@@ -207,15 +213,15 @@ public class VisiCalc {
 			case1 = A
 			case2 = 4
 			*/
-			checkCol(case1);
+			
 			//if any of the conditions are met, then it will return true
 			//and cellloc will be the index
-			//System.out.println(case1);
-			if (checkColumn) {
+			//System.out.println(case1);			
+			if (!(checkCol(case1) == -1)) {
 				//if the checkColumn was returned true
 				// it will then check the row
-				checkRow(case2);
-				if(checkColumn && checkR) {
+				
+				if(!(checkRow(case2) == -1)) {
 					validCell = true;
 					return validCell;
 				}
@@ -252,56 +258,112 @@ public class VisiCalc {
 		
 	}
 
-	public static boolean checkCol(String case2) {
+	public static int checkCol(String case2) {
+		
 		if (case2.equalsIgnoreCase("A")){
 			cellLoc2 = 0;
-			checkColumn = true;
+			return 0;
 
 		} else if (case2.equalsIgnoreCase("B")){
 			cellLoc2 = 1;
-			checkColumn = true;
+			return 1;
 		} else if(case2.equalsIgnoreCase("C")){
 			cellLoc2 = 2;
-			checkColumn = true;
+			
+			return 2;
 		} else if(case2.equalsIgnoreCase("D")){
 			cellLoc2 = 3;
-			checkColumn = true;
+			
+			return 3;
 		} else if(case2.equalsIgnoreCase("E")){
 			cellLoc2 = 4;
-			checkColumn = true;
+			
+			return 4;
 		} else if(case2.equalsIgnoreCase("F")){
 			cellLoc2 = 5;
-			checkColumn = true;
+			
+			return 5;
 		} else if(case2.equalsIgnoreCase("G")){
 			cellLoc2 = 6;
-			checkColumn = true;
+			
+			return 6;
 		} else{
-			checkColumn = false;
 			validCell = false;
-			return checkColumn;
+			return -1;
 		}
-		return checkColumn;
 	}
-	public static boolean checkRow(String rowTest) {
+	public static int checkRow(String rowTest) {
 		try {
+			int checkingRow = Integer.parseInt(rowTest);
 			cellLoc1 = Integer.parseInt(rowTest);
-			if(cellLoc1 == 0 || cellLoc1 > 10){
-				checkR = false;
-				return checkR;
+			if(checkingRow == 0 || checkingRow > 10){
+				return checkingRow;
 			}
 			else{
-				checkR = true;
+				return -1;
 			}
-			
-			return checkR;
 		}
 		catch(final NumberFormatException catcherror){
-			checkR = false;
 			validCell = false;
-			return checkR;
+			return -1;
 		}
 		
 		
+	}
+	
+	public static boolean isItAFormula(String[] formulaInput) {
+		boolean hasOp = false;
+		boolean hasFormula = false;
+		boolean hasLeftover = false;
+		for(int u = 1; u < formulaInput.length; u+=2) {
+			if(!checkOperation(formulaInput[u])) {
+				return false;
+			}
+			else {
+				hasOp = true;
+			}
+		}
+		for(int p = 0; p < formulaInput.length; p+=2) {
+			if(checkCell(formulaInput[p])) {
+				hasFormula = true;
+			}
+			else {
+				hasLeftover = true;
+			}
+		}
+		if( hasFormula && hasLeftover && hasOp) {
+			return true;
+		}
+		
+		
+		
+		return false;
+		
+	}
+
+	private static boolean checkOperation(String potentialOp) {
+		if(potentialOp.equalsIgnoreCase("+")) {
+			return true;
+		}
+		else if(potentialOp.equalsIgnoreCase("-")) {
+			return true;
+		}
+		else if(potentialOp.equalsIgnoreCase("*")) {
+			return true;
+		}
+		else if(potentialOp.equalsIgnoreCase("/")) {
+			return true;
+		}
+		else {
+		return false;
+		}
+	}
+	public static String getCell(String cell){
+		String case1 = cell.substring(0,1);
+		String case2 = cell.substring(1);
+		
+
+		return Grid.getCell(checkRow(case1), checkCol(case2));
 	}
 
 }

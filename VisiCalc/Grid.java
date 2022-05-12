@@ -103,6 +103,9 @@ public class Grid {
 	public static String getCell(int cellLoc1, int cellLoc2) {
 		return spreadsheet[cellLoc1-1][cellLoc2].finalresult;
 	}
+    public static void assignFormulaCell(int cellLoc1, int cellLoc2, String[] formulaInput) {
+		spreadsheet[cellLoc1-1][cellLoc2] = new FormulaCell(formulaInput);	
+    }
 	
 	/*public static void createNewCell(int column, int row) {
 		spreadsheet[row-1][column-1] = new Cell();

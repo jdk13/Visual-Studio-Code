@@ -4,6 +4,9 @@ public class Cell {
 	String cellText;
 	String DateText;
 	String finalresult = "";
+	String formulaText;
+	int cellLocation;
+	int cellLocation2;
 
 	public Cell(double cellNum){
 		this.cellNum = cellNum;
