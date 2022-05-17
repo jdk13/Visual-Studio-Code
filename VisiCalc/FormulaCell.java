@@ -11,17 +11,44 @@ public class FormulaCell extends Cell {
 	}
 
 	private String convert(String[] formula) {
-		int formulaInt = 0;
-		
-		for (String u : formula) {
-			if(VisiCalc.checkCell(u)){
-				String k = VisiCalc.getCell(u);
-				
-			
+		int math = 0;
+		for (int i = 0; i < formula.length; i+=2){
+			if(VisiCalc.checkCell(formula[i])) {
+				if(isItAnum(VisiCalc.getCell(formula[i]))) {
+					math++;
+				}				
+			}
+			else {
+				if(isItAnum(formula[i])) {
+					math++;
+				}
 			}
 		}
-		
-		return null;
+		if((formula.length + 1)/2 == math) {
+			mathEquation(formula);
+		}
+		else {
+			
+		}
+		return "";
+	}
+	
+	public int leftAndRight(String test, int direction) {
+		return 0;
+	}
+	
+	public boolean isItAnum(String p) {
+		double parsed = 0.0;
+		try {
+			parsed = Double.parseDouble(p);
+			return true;
+		}
+		catch(NumberFormatException e) {
+			return false;
+		}
+	}
+	public String mathEquation(String[] r) {
+		return "";
 	}
 
 }

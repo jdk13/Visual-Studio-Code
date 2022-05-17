@@ -17,6 +17,8 @@ public class VisiCalc {
 	static boolean intString;
 	static String[] testcmd;
 	static boolean validCell = false;
+	static boolean stringformula = false;
+	
 
 	
 	static boolean returnedAssignment = false;
@@ -28,6 +30,7 @@ public class VisiCalc {
 		
 		// returning same input
 		while (!quit) {
+			String[] miniArray;
 			System.out.print("Enter:  ");
 			String answer = input.nextLine();
 			if (answer.equalsIgnoreCase("print")) {
@@ -112,7 +115,8 @@ public class VisiCalc {
 						String[] formulaInput = testcmd[3].split(" ");
 
 						//check if formula cell first
-						if(isItAFormula(formulaInput)) {
+						String[] miniarray = isItAFormula(formulaInput);
+						if(miniarray[0] == "false") {
 							checkCell(testcmd[0]);
 							Grid.assignFormulaCell(cellLoc1, cellLoc2, formulaInput);
 						}
@@ -311,37 +315,45 @@ public class VisiCalc {
 		
 	}
 	
-	public static boolean isItAFormula(String[] formulaInput) {
-		boolean hasOp = false;
-		boolean hasFormula = false;
-		boolean hasLeftover = false;
-		for(int u = 1; u < formulaInput.length; u+=2) {
-			if(!checkOperation(formulaInput[u])) {
-				return false;
+	public static String[] isItAFormula(String[] formulaInput) {
+		int lengthofinpu = formulaInput.length;
+		int adjustedsize = 0;
+		String[] adjust;
+		for(int i = 0; i < formulaInput.length; i++){
+			if(formulaInput[i].startsWith("\"") && !formulaInput[i].endsWith("\"")){
+				boolean finalquote = true;
+				int j = i;
+				
+				while(finalquote){
+					if(formulaInput[j].endsWith("\"")){
+						finalquote = false;
+					}
+					else{
+						j++;
+						adjustedsize++;
+					}
+
+				}
+
 			}
-			else {
-				hasOp = true;
-			}
+
 		}
-		for(int p = 0; p < formulaInput.length; p+=2) {
-			if(checkCell(formulaInput[p])) {
-				hasFormula = true;
+		adjust = new String[formulaInput.length - adjustedsize];
+		int p = 0;
+		for(int k = 0; k < adjust.length; k++, p++){
+			adjust[k] = formulaInput[p];
+			if(formulaInput[p].startsWith("\"")){
+				while(!formulaInput[p].endsWith("\"")){
+					adjust[k]+= " " + formulaInput[p];
+					p++;
+				}
 			}
-			else {
-				hasLeftover = true;
-			}
+
 		}
-		if( hasFormula && hasLeftover && hasOp) {
-			return true;
-		}
-		
-		
-		
-		return false;
-		
+
 	}
 
-	private static boolean checkOperation(String potentialOp) {
+	public static boolean checkOperation(String potentialOp) {
 		if(potentialOp.equalsIgnoreCase("+")) {
 			return true;
 		}
@@ -367,3 +379,84 @@ public class VisiCalc {
 	}
 
 }
+/*C4 + " asd we" + "we re er " 
+
+0 = C4
+1 = +
+2 = "
+3 = asd
+4 = we"
+5 = +
+6 = "we
+7 = re
+8 = er
+9 = "
+String[] strings = new String[formulaInput.length];
+int minimizearray = 0;
+for(int j = 0; j < formulaInput.length; j++) {
+	strings[j] = formulaInput[j];
+	if(formulaInput[j].substring(0, 1).equalsIgnoreCase("\"") && !formulaInput[j].endsWith("\"")){
+		stringformula = true;
+		int o = j + 1;
+		while(!formulaInput[o].endsWith("\"")){
+			strings[j] += " " + formulaInput[o];
+			o++;
+			minimizearray++;
+		}
+		strings[j] += " " + formulaInput[o];
+		j = o;
+		
+	}
+}
+String[] miniArray = new String[formulaInput.length - minimizearray];
+for(int k = 0; k < strings.length - minimizearray; k++){
+	miniArray[k] = strings[k];
+}
+
+boolean hasOp = false;
+boolean hasFormula = false;
+boolean hasLeftover = false;
+for(int u = 1; u < miniArray.length; u+=2) {
+	if((miniArray[u].equals("*") || miniArray[u].equals("/") || miniArray[u].equals("-")) && stringformula) {
+		return false;
+	}
+	else if(checkOperation(miniArray[u])) {
+		hasOp = true;
+	}
+}
+int mathEquation = 0;
+if(!stringformula){
+	for(int p = 0; p < miniArray.length; p+=2) {
+		if(checkCell(miniArray[p])) {
+			hasFormula = true;
+			try {
+				double d = Double.parseDouble(getCell(miniArray[p]));
+				mathEquation++;
+
+			} catch (NumberFormatException e) {
+				mathEquation--;
+			}
+		}
+		else {
+			try {
+				double d = Double.parseDouble(getCell(miniArray[p]));
+				mathEquation++;
+
+			} catch (NumberFormatException e) {
+				mathEquation--;
+			}
+			hasLeftover = true;
+		}
+	}
+}
+if(mathEquation ==( miniArray.length  + 1) / 2){
+	
+}
+if( hasFormula && hasLeftover && hasOp) {
+	return true;
+}
+
+
+
+return false;
+*/

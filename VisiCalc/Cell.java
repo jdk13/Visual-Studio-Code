@@ -20,7 +20,7 @@ public class Cell {
 	}
 	public static String convertToInt(double d){
 		String num = Double.toString(d);
-		if(num.substring(num.length()-1).equals("0")){
+		if(num.substring(num.length()-2).equals(".0")){
 			num = num.substring(0, num.length()-2);
 		}
 		return num;
