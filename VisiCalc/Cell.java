@@ -8,26 +8,27 @@ public class Cell {
 	int cellLocation;
 	int cellLocation2;
 
-	public Cell(double cellNum){
+	public Cell(double cellNum) {
 		this.cellNum = cellNum;
 		finalresult = cellNum + "";
-		
-		
+
 	}
-	public Cell(int cellNum){
+
+	public Cell(int cellNum) {
 		this.cellNum2 = cellNum;
 		finalresult = cellNum2 + "";
 	}
-	public static String convertToInt(double d){
+
+	public static String convertToInt(double d) {
 		String num = Double.toString(d);
-		if(num.substring(num.length()-2).equals(".0")){
-			num = num.substring(0, num.length()-2);
+		if (num.substring(num.length() - 1).equals("0")) {
+			num = num.substring(0, num.length() - 2);
 		}
 		return num;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		return cellNum + "";
 	}
-	
+
 }
