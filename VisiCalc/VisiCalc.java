@@ -16,7 +16,8 @@ public class VisiCalc {
 	static boolean intString;
 	static String[] testcmd;
 	static boolean validCell = false;
-
+	static boolean isAFormula = false;
+	static boolean mathForm = false;
 	static boolean returnedAssignment = false;
 
 	public static void main(String args[]) {
@@ -26,6 +27,8 @@ public class VisiCalc {
 
 		// returning same input
 		while (!quit) {
+			mathForm = false;
+			isAFormula = false;
 			cellLoc1 = 0;
 			cellLoc2 = 0;
 			System.out.print("Enter:  ");
@@ -101,7 +104,7 @@ public class VisiCalc {
 						String[] formulaInput = testcmd[2].split(" ");
 
 						// check if formula cell first
-						// String[] compress = isItAFormula(formulaInput);
+						String[] compress = isItAFormula(formulaInput);
 						/*
 						 * if(compress[0].equals("Invalid")) {
 						 * checkCell(testcmd[0]);
@@ -109,6 +112,7 @@ public class VisiCalc {
 						 * }
 						 */
 						// else
+						
 						if (intorString(testcmd[2])) { // cell as an int
 							int cellLoc3 = checkCol(testcmd[0].substring(0, 1));
 							int cellRow3 = checkRow(testcmd[0].substring(1));
@@ -117,10 +121,15 @@ public class VisiCalc {
 						} else if (checkifDate(testcmd[2])) { // cell as a date
 							Grid.assignDateCell(cellLoc1, cellLoc2, testcmd[2]);
 							return true;
-						} else if ((testcmd[2].indexOf("\"") == 0) && testcmd[2].endsWith("\"")) { // cell as a string
+						} else if ((testcmd[2].startsWith("\"")) && testcmd[2].endsWith("\"")) { // cell as a string
 							Grid.assignStringCell(cellLoc1, cellLoc2, testcmd[2].substring(1, testcmd[2].length() - 1));
 							return true;
-						} else {
+						}else if(isAFormula){
+							Grid.assignFormulaCell(cellLoc1, cellLoc2, compress);
+							return true;
+						}
+						
+						else {
 							return false;
 
 						}
@@ -196,19 +205,15 @@ public class VisiCalc {
 			// if any of the conditions are met, then it will return true
 			// and cellloc will be the index
 			// System.out.println(case1);
-			if (!(checkCol(case1) == -1)) {
-				// if the checkColumn was returned true
-				// it will then check the row
-
-				if (!(checkRow(case2) == -1)) {
-					validCell = true;
-					return true;
-				} else {
-					return false;
-				}
-
-			} else {
+			if(checkCol(case1) == -1){
 				return false;
+			}
+			else if(checkRow(case2) == -1){
+				return false;
+			}
+			else{
+				validCell = true;
+				return true;
 			}
 
 		}
@@ -276,8 +281,9 @@ public class VisiCalc {
 	public static int checkRow(String rowTest) {
 		try {
 			int checkingRow = Integer.parseInt(rowTest);
-			cellLoc1 = Integer.parseInt(rowTest);
-			if (!(checkingRow == 0 || checkingRow > 10)) {
+			
+			if (checkingRow > 0 && checkingRow < 11) {
+				cellLoc1 = checkingRow;
 				return cellLoc1;
 			} else {
 				return -1;
@@ -295,37 +301,42 @@ public class VisiCalc {
 		// needs cell
 		// needs at least one other value
 		// needs to mash all quotes into one in case of spaces in the quote
+		
 
 		String[] mini;
-		boolean mathForm = true;
-		for (String a : formulaInput) {
+		mathForm = true;
+		for (String a : formulaInput) { //If has " then it cannot be a math
 			if (a.startsWith("\"")) {
 				mathForm = false;
 			}
 		} // addressing the quotes
+		int reduce = 0;
+		
 		if (!mathForm) {
 			for (String a : formulaInput) {
 				if (a.equals("-") || a.equals("*") || a.equals("/")) {
 					mini = new String[1];
+					isAFormula = false;
 					mini[0] = "Invalid";
 					return mini;
 				}
 			}
-		} // if it isn't a math formula, there must only be +
-		boolean during = false; // during means if we are still within quote
-		int reduce = 0;
-		for (int i = 0; i < formulaInput.length; i++) {
-			if (during) {
-				reduce++;
-			}
-			if (formulaInput[i].startsWith("\"") && !during) {
-				during = true;
-			}
-			if (formulaInput[i].endsWith("\"") && during) {
-				during = false;
+			boolean during = false; // during means if we are still within quote
+			
+			for (int i = 0; i < formulaInput.length; i++) {
+				if (during) {
+					reduce++;
+				}
+				if (formulaInput[i].startsWith("\"") && !during) {
+					during = true;
+				}
+				if (formulaInput[i].endsWith("\"") && during) {
+					during = false;
 
+				}
 			}
-		}
+			
+		} // if it isn't a math formula, there must only be +
 		mini = new String[formulaInput.length - reduce];
 		int k = 0;
 		for (int j = 0; j < mini.length; j++, k++) {
@@ -338,6 +349,7 @@ public class VisiCalc {
 						k++;
 					}
 				} catch (ArrayIndexOutOfBoundsException e) {
+					isAFormula = false;
 					mini[0] = "Invalid";
 					return mini;
 				}
@@ -350,21 +362,91 @@ public class VisiCalc {
 			}
 
 		}
-		for (int m = 1; m < mini.length; m += 2) {
+		
+		// at this point, mini has been reformed so that an element has an entire quote
+		// and if Mini isn't a math form but has */- it needs to return false
+		
+		for (int m = 1; m < mini.length; m += 2) { //check op
 			if (!checkOperation(mini[m])) {
+				isAFormula = false;
 				mini[0] = "Invalid";
 				return mini;
 			}
-		}
+			
+		} //check cell or text
+		//If Cell, get the value (done)
+
+		//Check if is an int /check if it starts and end with quotes
+		//If none, then we false
+		//But if any are dates, automatic false (done)
+		int allMath = 0;
+		boolean hasCell = false;
+		/*if Cells is Int
+
+		Non Cell can be String or Int
+
+		if Cells is String
+
+		Non Cell can only be string*/
 		for (int index = 0; index < mini.length; index+=2) {
+			String u;
 			if (checkCell(mini[index])) {
-				String u = getCell(mini[index]);
-				if(!intorString(u)){
-					mathForm = false;
+				 u = getCell(mini[index]);	
+				 mini[index] = getCell(mini[index]);
+				 hasCell = true;
+			}
+			else {
+				u = mini[index];
+			}
+			
+			if(checkifDate(u)) {
+				isAFormula = false;
+				mini[0] = "Invalid";
+				return mini;
+			}
+			try {
+				double d = Double.parseDouble(u);
+				
+				allMath++;
+			}
+			catch(NumberFormatException e){
+				
+				if(!(u.startsWith("\"") && u.endsWith("\""))) {
+					isAFormula = false;
+					mini[0] = "Invalid";
+					return mini;
 				}
-			} else {
 				
 			}
+			
+			
+			
+		}
+		if(((mini.length+1)/2 == allMath) && mathForm && hasCell){
+			isAFormula = true;
+			return mini;
+		}
+		if(!mathForm){
+			int allPlus = 0;
+			for(int o = 2; o < mini.length; o+=2){
+				if(mini[o].equals("+")){
+					allPlus++;
+				}
+			}
+			if(allPlus == mini.length/2){
+				isAFormula = true;
+				return mini;
+			}
+			else if(mini.length == 1){
+				isAFormula = false;
+				return mini;
+			}
+			else{
+				isAFormula = false;
+				mini[0] = "Invalid";
+				return mini;
+			}
+
 		}
 		// mini[0] = "Invalid";
 		// new array is mini and has been modified
