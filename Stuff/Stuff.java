@@ -1,6 +1,6 @@
 package Stuff;
 
-public class chessmoves{
+public class Stuff{
     public static void Main(String args[]){
         GenerateMoves("B");
         
