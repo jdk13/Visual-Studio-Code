@@ -95,8 +95,12 @@ public class VisiCalc {
 					return true;
 				}
 			}
+			else {
+				return false;
+			}
+		}
 			// if the 2nd element is an =, then we can run these tests
-			if (testcmd.length > 1) {
+		else if (testcmd.length > 1) {
 				if (testcmd[1].equals("=")) {
 
 					// this will check if the requested cell location and its contents are valid
@@ -152,8 +156,6 @@ public class VisiCalc {
 				}
 			}
 			return false;
-		}
-		return false;
 	}
 
 	// this effectively splits everything by spaces into arrays
