@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch Stuff",
+            "request": "launch",
+            "mainClass": "Stuff.Stuff",
+            "projectName": "Visual-Studio-Code_979b120a"
+        },
+        {
+            "type": "java",
+            "name": "Launch VisiCalc",
+            "request": "launch",
+            "mainClass": "VisiCalc",
+            "projectName": "Visual-Studio-Code_979b120a"
+        }
+    ]
+}

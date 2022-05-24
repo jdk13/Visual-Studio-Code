@@ -11,11 +11,11 @@ public class FormulaCell extends Cell {
 
 	private String convert(String[] formula) {
 		if(VisiCalc.mathForm){
-			double totalval = MathIt(wholearray.length -1);
+			double totalval = MathIt(wholearray.length - 1);
 			String totalval0 = totalval + "";
 			int possibleParse = 0;
 			if(totalval0.endsWith(".0")){
-				possibleParse = Integer.parseInt(totalval0);
+				possibleParse = (int) Double.parseDouble(totalval0);
 				return possibleParse + "";
 			}
 			
@@ -23,8 +23,15 @@ public class FormulaCell extends Cell {
 		}
 		else{
 			String cat = "";
-			for(int e = 0; e < wholearray.length; e+=2){
-				cat+= wholearray[e];
+			for (int e = 0; e < wholearray.length; e += 2) {
+				String possibleCell = "";
+				if (VisiCalc.checkCell(wholearray[e])) {
+					possibleCell = VisiCalc.getCell(wholearray[e]);
+					cat += possibleCell;
+				}
+				else{
+					cat += wholearray[e];
+				}
 			}
 			return cat;
 		}
@@ -47,7 +54,7 @@ public class FormulaCell extends Cell {
 			return MathIt(index - 2) * element;
 		}
 		else if(wholearray[index-1].equals("+")){
-			return MathIt(index - 2) - element;
+			return MathIt(index - 2) + element;
 		}
 		return -1;
 	}

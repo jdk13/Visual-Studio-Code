@@ -128,6 +128,6 @@ public class Stuff {
     }
 
     private static void validSquares(String letter, int j) {
-        i
+        
     }
 }
