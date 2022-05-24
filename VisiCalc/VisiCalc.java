@@ -511,7 +511,7 @@ public class VisiCalc {
 		String case1 = cell.substring(0, 1);
 		String case2 = cell.substring(1);
 
-		return Grid.getCell(checkRow(case1), checkCol(case2));
+		return Grid.getCell(checkRow(case2), checkCol(case1));
 	}
 
 }

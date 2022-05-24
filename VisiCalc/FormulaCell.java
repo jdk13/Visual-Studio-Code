@@ -16,8 +16,10 @@ public class FormulaCell extends Cell {
 			int possibleParse = 0;
 			if(totalval0.endsWith(".0")){
 				possibleParse = Integer.parseInt(totalval0);
+				return possibleParse + "";
 			}
-			return possibleParse + "";
+			
+			return totalval0 + "";
 		}
 		else{
 			String cat = "";
