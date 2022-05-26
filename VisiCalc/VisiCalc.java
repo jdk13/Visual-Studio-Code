@@ -314,13 +314,17 @@ public class VisiCalc {
 
 		String[] mini;
 		mathForm = true;
-		if (formulaInput[0].equalsIgnoreCase("Sum") || formulaInput[0].equalsIgnoreCase("Sum")) {
+		// if has sum or avg, we check which one to traverse
+		// and then check if every cell has an int
+		//
+		if (formulaInput[0].equalsIgnoreCase("Sum") || formulaInput[0].equalsIgnoreCase("Avg")) {
 			if (formulaInput[2].equalsIgnoreCase("-")) {
 				if (checkCell(formulaInput[1]) && checkCell(formulaInput[3])) {
 					if (formulaInput[1].substring(0, 1).equals(formulaInput[3].substring(0, 1))) {
-						isAFormula = true;
-						Grid.spec = true;
-						return formulaInput;
+						int s = checkRow(formulaInput[1].substring(0, 1));
+						int p = checkCol(formulaInput[3].substring(0, 1));
+						int l = s - p;
+
 					}
 					if (formulaInput[1].substring(1).equals(formulaInput[3].substring(1))) {
 						isAFormula = true;

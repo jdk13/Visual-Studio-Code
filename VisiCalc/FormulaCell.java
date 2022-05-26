@@ -35,7 +35,7 @@ public class FormulaCell extends Cell {
 			if (sum == 0) {
 				int num = Integer.parseInt(formulaInput[1].substring(1));
 				int num2 = Integer.parseInt(formulaInput[1].substring(1));
-
+				
 			}
 		}
 	}
@@ -88,8 +88,5 @@ public class FormulaCell extends Cell {
 		return -1;
 	}
 
-	public String[] Special(String[] r, ) {
-		 String[] sa = new String[]
-	 }
 
 }
