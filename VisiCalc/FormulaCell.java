@@ -21,12 +21,23 @@ public class FormulaCell extends Cell {
 		}
 		if (form.length == 1 && VisiCalc.checkCell(form[0])) {
 			formulaText = VisiCalc.getCell(form[0]);
-		}
-		else {
+		} else {
 			formulaText = convert(wholearray);
 		}
-		
+
 		finalresult = formulaText + "";
+	}
+
+	public FormulaCell(String[] formulaInput, int sum) {
+		super(0);
+		// sum is the num that identifies if the thing is by letter or num
+		if (formulaInput[0].equalsIgnoreCase("Sum")) {
+			if (sum == 0) {
+				int num = Integer.parseInt(formulaInput[1].substring(1));
+				int num2 = Integer.parseInt(formulaInput[1].substring(1));
+
+			}
+		}
 	}
 
 	public String convert(String[] formula) {
@@ -76,5 +87,9 @@ public class FormulaCell extends Cell {
 		}
 		return -1;
 	}
+
+	public String[] Special(String[] r, ) {
+		 String[] sa = new String[]
+	 }
 
 }

@@ -1,8 +1,8 @@
+
 // Jacob Kim
 // AP Computer Science
 // VisiCalc
 // Checkpoint 2
-
 import java.util.Scanner;
 
 public class VisiCalc {
@@ -27,7 +27,7 @@ public class VisiCalc {
 
 		// returning same input
 		while (!quit) {
-
+			Grid.spec = false;
 			isAFormula = false;
 			cellLoc1 = 0;
 			cellLoc2 = 0;
@@ -109,11 +109,7 @@ public class VisiCalc {
 
 					// check if formula cell first
 					String[] compress = isItAFormula(formulaInput);
-					if (formulaInput[0].equalsIgnoreCase("Sum")) {
-
-					} else if (formulaInput[0].equalsIgnoreCase("Avg")) {
-
-					} else if (formulaInput.length == 1 && checkCell(formulaInput[0])) {
+					if (formulaInput.length == 1 && checkCell(formulaInput[0])) {
 						int cellLoc3 = checkCol(testcmd[0].substring(0, 1));
 						int cellRow3 = checkRow(testcmd[0].substring(1));
 						Grid.assignFormulaCell(cellRow3, cellLoc3, compress);
@@ -318,6 +314,32 @@ public class VisiCalc {
 
 		String[] mini;
 		mathForm = true;
+		if (formulaInput[0].equalsIgnoreCase("Sum") || formulaInput[0].equalsIgnoreCase("Sum")) {
+			if (formulaInput[2].equalsIgnoreCase("-")) {
+				if (checkCell(formulaInput[1]) && checkCell(formulaInput[3])) {
+					if (formulaInput[1].substring(0, 1).equals(formulaInput[3].substring(0, 1))) {
+						isAFormula = true;
+						Grid.spec = true;
+						return formulaInput;
+					}
+					if (formulaInput[1].substring(1).equals(formulaInput[3].substring(1))) {
+						isAFormula = true;
+						Grid.spec = true;
+						return formulaInput;
+					} else {
+						isAFormula = false;
+						return formulaInput;
+					}
+				} else {
+					isAFormula = false;
+					return formulaInput;
+				}
+			} else {
+				isAFormula = false;
+				return formulaInput;
+			}
+
+		}
 
 		for (String a : formulaInput) { // If has " then it cannot be a math
 			if (a.startsWith("\"")) {

@@ -1,7 +1,8 @@
 
 public class Grid {
-
+	static boolean spec = false;
 	static Cell[][] spreadsheet;
+	static int let = -1;
 
 	public Grid(int width, int length) {
 		spreadsheet = new Cell[width][length];
@@ -112,6 +113,9 @@ public class Grid {
 	}
 
 	public static void assignFormulaCell(int cellLoc1, int cellLoc2, String[] formulaInput) {
+		if (spec) {
+			spreadsheet[cellLoc1 - 1][cellLoc2] = new FormulaCell(formulaInput, let);
+		}
 		spreadsheet[cellLoc1 - 1][cellLoc2] = new FormulaCell(formulaInput);
 	}
 
