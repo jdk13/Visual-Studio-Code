@@ -5,11 +5,7 @@ public class Grid {
 
 	public Grid(int width, int length) {
 		spreadsheet = new Cell[width][length];
-		for (int i = 0; i < length; i++) {
-			for (int j = 0; j < width; j++) {
-				// spreadsheet[j][i] = new Cell();
-			}
-		}
+		
 
 	}
 
@@ -48,6 +44,10 @@ public class Grid {
 				} else {
 
 					if (spreadsheet[i][k].finalresult.length() < 10) {
+						if(spreadsheet[i][k] instanceof FormulaCell) {
+							spreadsheet[i][k].updateCell(spreadsheet[i][k]);
+						}
+						
 						System.out.print(spreadsheet[i][k].finalresult);
 
 						if (spreadsheet[i][k].finalresult.length() < 9) {
@@ -77,6 +77,8 @@ public class Grid {
 
 	}
 
+	
+
 	public void printDash(int n) {
 		if (n > 0) {
 			System.out.print("-");
@@ -105,6 +107,9 @@ public class Grid {
 	}
 
 	public static String getCell(int cellLoc1, int cellLoc2) {
+		if((spreadsheet[cellLoc1 - 1][cellLoc2] instanceof FormulaCell) && spreadsheet[cellLoc1 - 1][cellLoc2].form.length == 1) {
+			spreadsheet[cellLoc1 - 1][cellLoc2].updateCell(spreadsheet[cellLoc1 - 1][cellLoc2]);
+		}
 		return spreadsheet[cellLoc1 - 1][cellLoc2].finalresult;
 	}
 
