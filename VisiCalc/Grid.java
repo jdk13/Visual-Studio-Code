@@ -5,7 +5,6 @@ public class Grid {
 
 	public Grid(int width, int length) {
 		spreadsheet = new Cell[width][length];
-		
 
 	}
 
@@ -44,10 +43,10 @@ public class Grid {
 				} else {
 
 					if (spreadsheet[i][k].finalresult.length() < 10) {
-						if(spreadsheet[i][k] instanceof FormulaCell) {
+						if (spreadsheet[i][k] instanceof FormulaCell) {
 							spreadsheet[i][k].updateCell(spreadsheet[i][k]);
 						}
-						
+
 						System.out.print(spreadsheet[i][k].finalresult);
 
 						if (spreadsheet[i][k].finalresult.length() < 9) {
@@ -77,8 +76,6 @@ public class Grid {
 
 	}
 
-	
-
 	public void printDash(int n) {
 		if (n > 0) {
 			System.out.print("-");
@@ -106,11 +103,12 @@ public class Grid {
 		spreadsheet[cellLoc1 - 1][cellLoc2] = new DateCell(input);
 	}
 
-	public static String getCell(int cellLoc1, int cellLoc2) {
-		if((spreadsheet[cellLoc1 - 1][cellLoc2] instanceof FormulaCell) && spreadsheet[cellLoc1 - 1][cellLoc2].form.length == 1) {
-			spreadsheet[cellLoc1 - 1][cellLoc2].updateCell(spreadsheet[cellLoc1 - 1][cellLoc2]);
+	public static String getCell(int l, int c) {
+		if ((spreadsheet[l - 1][c] instanceof FormulaCell)) {
+			spreadsheet[l - 1][c].updateCell(spreadsheet[l - 1][c]);
 		}
-		return spreadsheet[cellLoc1 - 1][cellLoc2].finalresult;
+
+		return spreadsheet[l - 1][c].finalresult;
 	}
 
 	public static void assignFormulaCell(int cellLoc1, int cellLoc2, String[] formulaInput) {

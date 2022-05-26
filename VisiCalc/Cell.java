@@ -6,15 +6,18 @@ public class Cell {
 	String finalresult = "";
 	String formulaText;
 	String form[];
+	boolean formula;
 
 
 	public Cell(double cellNum) {
+		formula = false;
 		this.cellNum = cellNum;
 		finalresult = cellNum + "";
 
 	}
 
 	public Cell(int cellNum) {
+		formula = false;
 		this.cellNum2 = cellNum;
 		finalresult = cellNum2 + "";
 	}

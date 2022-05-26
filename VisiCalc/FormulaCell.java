@@ -5,6 +5,7 @@ public class FormulaCell extends Cell {
 
 	public FormulaCell(String[] input) {
 		super(0);
+		formula = true;
 		int o = 0;
 		form = new String[input.length];
 		for (String u : input) {

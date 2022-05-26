@@ -109,7 +109,11 @@ public class VisiCalc {
 
 					// check if formula cell first
 					String[] compress = isItAFormula(formulaInput);
-					if (formulaInput.length == 1 && checkCell(formulaInput[0])) {
+					if (formulaInput[0].equalsIgnoreCase("Sum")) {
+
+					} else if (formulaInput[0].equalsIgnoreCase("Avg")) {
+
+					} else if (formulaInput.length == 1 && checkCell(formulaInput[0])) {
 						int cellLoc3 = checkCol(testcmd[0].substring(0, 1));
 						int cellRow3 = checkRow(testcmd[0].substring(1));
 						Grid.assignFormulaCell(cellRow3, cellLoc3, compress);
