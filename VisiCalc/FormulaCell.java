@@ -3,10 +3,13 @@ public class FormulaCell extends Cell {
 	String input;
 	String wholearray[];
 
-	public FormulaCell(String[] input) {
+	public FormulaCell(String[] input, boolean avg) {
+		
 		super(0);
+		this.aver = avg;
 		formula = true;
 		int o = 0;
+		//whole thing 
 		form = new String[input.length];
 		for (String u : input) {
 			form[o] = u;
@@ -34,10 +37,11 @@ public class FormulaCell extends Cell {
 
 		if (VisiCalc.mathForm) {
 			double totalval = MathIt(wholearray.length - 1);
+			//this bit is for if the cell is an average
 			if (this.aver) {
 				int divide = 0;
-				for (int y = 0; y < wholearray.length - 1; y += 2) {
-					if (VisiCalc.checkCell(wholearray[y])) {
+				for (int y = 0; y <= wholearray.length - 1; y += 2) {
+					if (VisiCalc.checkCell(form[y])) {
 						divide++;
 					}
 				}
@@ -73,7 +77,7 @@ public class FormulaCell extends Cell {
 
 	public double MathIt(int index) {
 		double element = 0.0;
-
+		//a recursive approach to calculating the math
 		if (index >= 0) {
 			element = Double.parseDouble(wholearray[index]);
 		}

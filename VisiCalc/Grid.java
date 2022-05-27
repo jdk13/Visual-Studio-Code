@@ -1,6 +1,9 @@
+import java.util.ArrayList;
+import java.util.Collections;
+
 
 public class Grid {
-	static boolean spec = false;
+
 	static Cell[][] spreadsheet;
 	static int let = -1;
 
@@ -117,12 +120,32 @@ public class Grid {
 	}
 
 	public static void assignFormulaCell(int cellLoc1, int cellLoc2, String[] formulaInput) {
-		
-		spreadsheet[cellLoc1 - 1][cellLoc2] = new FormulaCell(formulaInput);
-		spreadsheet[cellLoc1 - 1][cellLoc2].assignCellName(cellLoc2, cellLoc1);
+
 		if (VisiCalc.avg) {
-			spreadsheet[cellLoc1 - 1][cellLoc2].aver = true;
+			spreadsheet[cellLoc1 - 1][cellLoc2] = new FormulaCell(formulaInput, true);
+			
 		}
+		else {
+			spreadsheet[cellLoc1 - 1][cellLoc2] = new FormulaCell(formulaInput, false);
+		}
+		
+		spreadsheet[cellLoc1 - 1][cellLoc2].assignCellName(cellLoc2, cellLoc1);
+		
+	}
+
+	
+
+	public static void sort(String[] testSort) {
+		ArrayList<Cell> sort = new ArrayList<Cell>();
+		for(int i = 0; i < testSort.length; i++) {
+			int Row = VisiCalc.checkRow(testSort[i].substring(1)) - 1;
+			int Col = VisiCalc.checkCol(testSort[i].substring(0, 1));
+			sort.add(spreadsheet[Row][Col]);
+			
+		}
+		int p = 0;
+		Collections.sort(sort);
+		
 	}
 
 	/*

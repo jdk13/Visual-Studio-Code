@@ -20,6 +20,7 @@ public class VisiCalc {
 	static boolean mathForm = false;
 	static boolean returnedAssignment = false;
 	static boolean avg = false;
+	static boolean isSort = false;
 
 	public static void main(String args[]) {
 		boolean quit = false;
@@ -28,7 +29,7 @@ public class VisiCalc {
 
 		// returning same input
 		while (!quit) {
-			Grid.spec = false;
+			
 			isAFormula = false;
 			cellLoc1 = 0;
 			cellLoc2 = 0;
@@ -74,7 +75,7 @@ public class VisiCalc {
 
 		testcmd = testCase.split(" ");
 
-		if (testcmd.length > 3) {
+		if (testcmd.length > 3 && testcmd[1].equals("=")) {
 			for (int k = 3; k < testcmd.length; k++) {
 				String temp = testcmd[k];
 				testcmd[2] += " " + temp;
@@ -102,6 +103,13 @@ public class VisiCalc {
 		}
 		// if the 2nd element is an =, then we can run these tests
 		else if (testcmd.length > 1) {
+			if(testcmd[0].equalsIgnoreCase("Sorta") || testcmd[0].equalsIgnoreCase("Sortd")) {
+				String[] testSort = checkSort(testcmd);
+				if(isSort) {
+					Grid.sort(testSort);
+					return true;
+				}
+			}
 			if (testcmd[1].equals("=")) {
 
 				// this will check if the requested cell location and its contents are valid
@@ -159,6 +167,108 @@ public class VisiCalc {
 			}
 		}
 		return false;
+	}
+
+	private static String[] checkSort(String[] formulaInput) {
+		String[] special;
+		if (formulaInput[2].equalsIgnoreCase("-")) {
+			if (checkCell(formulaInput[1]) && checkCell(formulaInput[3])) {
+				//s and p are the values of different number
+				// if the bounds were A1 - A3
+				// s would be 1 and p would be 3
+				//l is the difference that helps determine the array
+				//r is the other one used for indexing the spreadsheet
+				int s = 0;
+				int l = 0;
+				int p = 0;
+				int r = 0;
+				boolean row = false;
+				boolean col = false;
+				if (formulaInput[1].substring(1).equals(formulaInput[3].substring(1))) {
+					s = checkCol(formulaInput[1].substring(0, 1));
+					p = checkCol(formulaInput[3].substring(0, 1));
+					r = checkRow(formulaInput[1].substring(1)) - 1;
+					col = true;
+				}
+				String a = formulaInput[1].substring(0, 1);
+				if (a.equals(formulaInput[3].substring(0, 1))) {
+					s = checkRow(formulaInput[1].substring( 1)) - 1;
+					p = checkRow(formulaInput[3].substring( 1)) - 1;
+					r = checkCol(formulaInput[3].substring(0, 1));
+					row = true;
+				}
+				if (row && col) {
+					isSort = false;
+					return formulaInput;
+				}
+				l = s - p;
+				if (l < 0) {
+					l = l * -1;
+				}
+				special = new String[l + 1];
+				if (s < p) {
+					int index = 0;
+					for (int w = s; w <= p; w++) {
+						if (row) {
+							if (Grid.spreadsheet[w][r].equals(null)) {
+								isSort = false;
+								return special;
+							} else {
+								special[index] = Grid.spreadsheet[w][r].cellName;
+							}
+						}
+						if (col) {
+							if (Grid.spreadsheet[r][w].equals(null)) {
+								isSort = false;
+								return special;
+							} else {
+								special[index] = Grid.spreadsheet[r][w].cellName;
+							}
+						}
+						//B2 - B7
+						// B2 + B3 + b4 + b5 + b6 + b7
+
+						
+						index ++;
+					}
+				}
+				else {
+					int index = 0;
+					for (int w = p; w <= s; w++) {
+						if (row) {
+							if (Grid.spreadsheet[w][r] == null) {
+								isAFormula = false;
+								return special;
+							} else {
+								special[index] = Grid.spreadsheet[w][r].cellName;
+							}
+						}
+						if (col) {
+							if (Grid.spreadsheet[r][w] == null) {
+								isSort = false;
+								return special;
+							} else {
+								special[index] = Grid.spreadsheet[w][r].cellName;
+							}
+						}
+						// B2 - B7
+						// B2 + B3 + b4 + b5 + b6 + b7
+
+						if (index != special.length - 1) {
+							special[index + 1] = "+";
+						}
+						index += 2;
+					}
+				}
+				
+			} else {
+				isSort = false;
+				return formulaInput;
+			}
+			isSort = true;
+			return special;
+		}
+		return formulaInput;
 	}
 
 	// this effectively splits everything by spaces into arrays
@@ -318,10 +428,15 @@ public class VisiCalc {
 		String[] special;
 		// if has sum or avg, we check which one to traverse
 		// and then check if every cell has an int
-		//
+		//this whole part covers sum and avg
 		if (formulaInput[0].equalsIgnoreCase("Sum") || formulaInput[0].equalsIgnoreCase("Avg")) {
 			if (formulaInput[2].equalsIgnoreCase("-")) {
 				if (checkCell(formulaInput[1]) && checkCell(formulaInput[3])) {
+					//s and p are the values of different number
+					// if the bounds were A1 - A3
+					// s would be 1 and p would be 3
+					//l is the difference that helps determine the array
+					//r is the other one used for indexing the spreadsheet
 					int s = 0;
 					int l = 0;
 					int p = 0;
@@ -455,6 +570,8 @@ public class VisiCalc {
 			}
 
 		} // if it isn't a math formula, there must only be +
+		//and this whole for loop is a way to mash strings with 
+		//spaces in them into a single element
 		mini = new String[formulaInput.length - reduce];
 		int k = 0;
 		for (int j = 0; j < mini.length; j++, k++) {
