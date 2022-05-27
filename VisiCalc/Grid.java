@@ -92,22 +92,26 @@ public class Grid {
 		} else {
 			spreadsheet[cellLoc1 - 1][cellLoc2] = new Cell(Integer.parseInt(thing));
 		}
+		spreadsheet[cellLoc1 - 1][cellLoc2].assignCellName(cellLoc2, cellLoc1 );
 
 	}
 
 	public static void assignStringCell(int cellLoc1, int cellLoc2, String input) {
 
 		spreadsheet[cellLoc1 - 1][cellLoc2] = new TextCell(input);
+		spreadsheet[cellLoc1 - 1][cellLoc2].assignCellName(cellLoc2, cellLoc1 );
 	}
 
 	public static void assignDateCell(int cellLoc1, int cellLoc2, String input) {
 		spreadsheet[cellLoc1 - 1][cellLoc2] = new DateCell(input);
+		spreadsheet[cellLoc1 - 1][cellLoc2].assignCellName(cellLoc2, cellLoc1 );
 	}
 
 	public static String getCell(int l, int c) {
 		if ((spreadsheet[l - 1][c] instanceof FormulaCell)) {
 			spreadsheet[l - 1][c].updateCell(spreadsheet[l - 1][c]);
 		}
+		spreadsheet[l-1][c].assignCellName(c, l);
 
 		return spreadsheet[l - 1][c].finalresult;
 	}
@@ -115,6 +119,10 @@ public class Grid {
 	public static void assignFormulaCell(int cellLoc1, int cellLoc2, String[] formulaInput) {
 		
 		spreadsheet[cellLoc1 - 1][cellLoc2] = new FormulaCell(formulaInput);
+		spreadsheet[cellLoc1 - 1][cellLoc2].assignCellName(cellLoc2, cellLoc1);
+		if (VisiCalc.avg) {
+			spreadsheet[cellLoc1 - 1][cellLoc2].aver = true;
+		}
 	}
 
 	/*

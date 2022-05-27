@@ -8,7 +8,7 @@ public class Cell {
 	String formulaText;
 	String form[];
 	boolean formula;
-
+	boolean aver;
 
 	public Cell(double cellNum) {
 		formula = false;
@@ -35,8 +35,6 @@ public class Cell {
 		return cellNum + "";
 	}
 
-	
-
 	public void updateCell(Cell cell) {
 		FormulaCell other = (FormulaCell) cell;
 		for (int i = 0; i < form.length; i += 2) {
@@ -48,8 +46,32 @@ public class Cell {
 
 	}
 
-	public void assignCellName(int row, int column){
-		
-	}
+	public void assignCellName(int column, int row) {
+		if (column == 0) {
+			cellName = "A";
+		}
+		if (column == 1) {
+			cellName = "B";
+		}
+		if (column == 2) {
+			cellName = "C";
+		}
+		if (column == 3) {
+			cellName = "D";
+		}
+		if (column == 4) {
+			cellName = "E";
+		}
+		if (column == 5) {
+			cellName = "F";
+		}
+		if (column == 6) {
+			cellName = "G";
+		}
+		if (column == 7) {
+			cellName = "H";
+		}
+		cellName += row + "";
 
+	}
 }

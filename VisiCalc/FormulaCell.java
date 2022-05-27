@@ -24,6 +24,7 @@ public class FormulaCell extends Cell {
 		} else {
 			formulaText = convert(wholearray);
 		}
+		
 
 		finalresult = formulaText + "";
 	}
@@ -33,6 +34,17 @@ public class FormulaCell extends Cell {
 
 		if (VisiCalc.mathForm) {
 			double totalval = MathIt(wholearray.length - 1);
+			if (this.aver) {
+				int divide = 0;
+				for (int y = 0; y < wholearray.length - 1; y += 2) {
+					if (VisiCalc.checkCell(wholearray[y])) {
+						divide++;
+					}
+				}
+				if (divide != 0) {
+					totalval = totalval / divide;
+				}
+			}
 			String totalval0 = totalval + "";
 			int possibleParse = 0;
 			if (totalval0.endsWith(".0")) {

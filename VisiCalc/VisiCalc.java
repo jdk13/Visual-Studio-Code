@@ -19,6 +19,7 @@ public class VisiCalc {
 	static boolean isAFormula = false;
 	static boolean mathForm = false;
 	static boolean returnedAssignment = false;
+	static boolean avg = false;
 
 	public static void main(String args[]) {
 		boolean quit = false;
@@ -314,6 +315,7 @@ public class VisiCalc {
 
 		String[] mini;
 		mathForm = true;
+		String[] special;
 		// if has sum or avg, we check which one to traverse
 		// and then check if every cell has an int
 		//
@@ -326,15 +328,18 @@ public class VisiCalc {
 					int r = 0;
 					boolean row = false;
 					boolean col = false;
-					if (formulaInput[1].substring(0, 1).equals(formulaInput[3].substring(0, 1))) {
+					if (formulaInput[1].substring(1).equals(formulaInput[3].substring(1))) {
 						s = checkCol(formulaInput[1].substring(0, 1));
 						p = checkCol(formulaInput[3].substring(0, 1));
-						r = checkRow(formulaInput[1].substring(0, 1)) - 1;
-											}
-					if (formulaInput[1].substring(1).equals(formulaInput[3].substring(1))) {
+						r = checkRow(formulaInput[1].substring(1)) - 1;
+						col = true;
+					}
+					String a = formulaInput[1].substring(0, 1);
+					if (a.equals(formulaInput[3].substring(0, 1))) {
 						s = checkRow(formulaInput[1].substring( 1)) - 1;
 						p = checkRow(formulaInput[3].substring( 1)) - 1;
 						r = checkCol(formulaInput[3].substring(0, 1));
+						row = true;
 					}
 					if (row && col) {
 						isAFormula = false;
@@ -344,20 +349,61 @@ public class VisiCalc {
 					if (l < 0) {
 						l = l * -1;
 					}
+					special = new String[l * 2 + 1];
 					if (s < p) {
+						int index = 0;
 						for (int w = s; w <= p; w++) {
+							if (row) {
+								if (Grid.spreadsheet[w][r].equals(null)) {
+									isAFormula = false;
+									return formulaInput;
+								} else {
+									special[index] = Grid.spreadsheet[w][r].cellName;
+								}
+							}
+							if (col) {
+								if (Grid.spreadsheet[r][w].equals(null)) {
+									isAFormula = false;
+									return formulaInput;
+								} else {
+									special[index] = Grid.spreadsheet[r][w].cellName;
+								}
+							}
+							//B2 - B7
+							// B2 + B3 + b4 + b5 + b6 + b7
+
+							if (index != special.length - 1) {
+								special[index + 1] = "+";
+							}
+							index += 2;
+						}
+					}
+					else {
+						int index = 0;
+						for (int w = p; w <= s; w++) {
 							if (row) {
 								if (Grid.spreadsheet[w][r] == null) {
 									isAFormula = false;
 									return formulaInput;
+								} else {
+									special[index] = Grid.spreadsheet[w][r].cellName;
 								}
 							}
 							if (col) {
 								if (Grid.spreadsheet[r][w] == null) {
 									isAFormula = false;
 									return formulaInput;
+								} else {
+									special[index] = Grid.spreadsheet[w][r].cellName;
 								}
 							}
+							// B2 - B7
+							// B2 + B3 + b4 + b5 + b6 + b7
+
+							if (index != special.length - 1) {
+								special[index + 1] = "+";
+							}
+							index += 2;
 						}
 					}
 					
@@ -369,8 +415,11 @@ public class VisiCalc {
 				isAFormula = false;
 				return formulaInput;
 			}
+			if (formulaInput[0].equalsIgnoreCase("Avg")) {
+				avg = true;
+			}
 			isAFormula = true;
-			return formulaInput;
+			return special;
 
 		}
 
