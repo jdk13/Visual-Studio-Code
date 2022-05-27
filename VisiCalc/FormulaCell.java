@@ -28,18 +28,7 @@ public class FormulaCell extends Cell {
 		finalresult = formulaText + "";
 	}
 
-	public FormulaCell(String[] formulaInput, int sum) {
-		super(0);
-		// sum is the num that identifies if the thing is by letter or num
-		if (formulaInput[0].equalsIgnoreCase("Sum")) {
-			if (sum == 0) {
-				int num = Integer.parseInt(formulaInput[1].substring(1));
-				int num2 = Integer.parseInt(formulaInput[1].substring(1));
-				
-			}
-		}
-	}
-
+	
 	public String convert(String[] formula) {
 
 		if (VisiCalc.mathForm) {
@@ -52,7 +41,10 @@ public class FormulaCell extends Cell {
 			}
 
 			return totalval0 + "";
-		} else {
+		} // else if (formula[0].equalsIgnoreCase("sum")) {
+
+	//}
+		else {
 			String cat = "";
 			for (int e = 0; e < wholearray.length; e += 2) {
 				String possibleCell = "";

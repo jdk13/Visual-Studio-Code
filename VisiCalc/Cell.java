@@ -1,4 +1,5 @@
 public class Cell {
+	String cellName;
 	double cellNum;
 	int cellNum2;
 	String cellText;
@@ -38,12 +39,16 @@ public class Cell {
 
 	public void updateCell(Cell cell) {
 		FormulaCell other = (FormulaCell) cell;
-		for(int i = 0; i < form.length; i+=2) {
-			if(VisiCalc.checkCell(form[i])){
+		for (int i = 0; i < form.length; i += 2) {
+			if (VisiCalc.checkCell(form[i])) {
 				other.wholearray[i] = VisiCalc.getCell(form[i]);
 			}
 		}
 		this.finalresult = other.convert(form) + "";
+
+	}
+
+	public void assignCellName(int row, int column){
 		
 	}
 

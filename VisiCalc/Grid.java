@@ -113,9 +113,7 @@ public class Grid {
 	}
 
 	public static void assignFormulaCell(int cellLoc1, int cellLoc2, String[] formulaInput) {
-		if (spec) {
-			spreadsheet[cellLoc1 - 1][cellLoc2] = new FormulaCell(formulaInput, let);
-		}
+		
 		spreadsheet[cellLoc1 - 1][cellLoc2] = new FormulaCell(formulaInput);
 	}
 

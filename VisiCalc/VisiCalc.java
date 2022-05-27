@@ -320,20 +320,47 @@ public class VisiCalc {
 		if (formulaInput[0].equalsIgnoreCase("Sum") || formulaInput[0].equalsIgnoreCase("Avg")) {
 			if (formulaInput[2].equalsIgnoreCase("-")) {
 				if (checkCell(formulaInput[1]) && checkCell(formulaInput[3])) {
+					int s = 0;
+					int l = 0;
+					int p = 0;
+					int r = 0;
+					boolean row = false;
+					boolean col = false;
 					if (formulaInput[1].substring(0, 1).equals(formulaInput[3].substring(0, 1))) {
-						int s = checkRow(formulaInput[1].substring(0, 1));
-						int p = checkCol(formulaInput[3].substring(0, 1));
-						int l = s - p;
-
-					}
+						s = checkCol(formulaInput[1].substring(0, 1));
+						p = checkCol(formulaInput[3].substring(0, 1));
+						r = checkRow(formulaInput[1].substring(0, 1)) - 1;
+											}
 					if (formulaInput[1].substring(1).equals(formulaInput[3].substring(1))) {
-						isAFormula = true;
-						Grid.spec = true;
-						return formulaInput;
-					} else {
+						s = checkRow(formulaInput[1].substring( 1)) - 1;
+						p = checkRow(formulaInput[3].substring( 1)) - 1;
+						r = checkCol(formulaInput[3].substring(0, 1));
+					}
+					if (row && col) {
 						isAFormula = false;
 						return formulaInput;
 					}
+					l = s - p;
+					if (l < 0) {
+						l = l * -1;
+					}
+					if (s < p) {
+						for (int w = s; w <= p; w++) {
+							if (row) {
+								if (Grid.spreadsheet[w][r] == null) {
+									isAFormula = false;
+									return formulaInput;
+								}
+							}
+							if (col) {
+								if (Grid.spreadsheet[r][w] == null) {
+									isAFormula = false;
+									return formulaInput;
+								}
+							}
+						}
+					}
+					
 				} else {
 					isAFormula = false;
 					return formulaInput;
@@ -342,6 +369,8 @@ public class VisiCalc {
 				isAFormula = false;
 				return formulaInput;
 			}
+			isAFormula = true;
+			return formulaInput;
 
 		}
 
