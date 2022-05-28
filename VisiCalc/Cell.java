@@ -1,4 +1,4 @@
-public class Cell {
+public class Cell{
 	String cellName;
 	double cellNum;
 	int cellNum2;
@@ -74,4 +74,6 @@ public class Cell {
 		cellName += row + "";
 
 	}
+
+	
 }
