@@ -651,6 +651,7 @@ public class VisiCalc {
 			}
 			try {
 				double d = Double.parseDouble(u);
+				System.out.println(d); // to be removed
 
 				allMath++;
 			} catch (NumberFormatException e) {

@@ -6,6 +6,13 @@
 	"configurations": [
 		{
 			"type": "java",
+			"name": "Launch Enigma",
+			"request": "launch",
+			"mainClass": "Enigma.Enigma",
+			"projectName": "Visual-Studio-Code_979b120a"
+		},
+		{
+			"type": "java",
 			"name": "Launch VisiCalc",
 			"request": "launch",
 			"mainClass": "VisiCalc",

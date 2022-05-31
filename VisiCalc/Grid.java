@@ -1,4 +1,4 @@
-import java.sql.Date;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -167,12 +167,14 @@ public class Grid {
 		int secRow = VisiCalc.checkRow(testSort[testSort.length - 1].substring(1)) - 1;
 		int firstCol = VisiCalc.checkCol(testSort[0].substring(0, 1));
 		int secCol = VisiCalc.checkCol(testSort[testSort.length - 1].substring(0, 1));
+		int o = firstCol + secCol + firstRow + secRow;
+		System.out.println(o);
 		// A, 1, A, 3
 		if (firstCol == secCol) {
-			int p = 0;
-			for (Cell c : sort) {
+			//int p = 0;
+			//for (Cell c : sort) {
 
-			}
+			//}
 
 		}
 

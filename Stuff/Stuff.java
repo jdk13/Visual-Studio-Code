@@ -1,6 +1,9 @@
 package Stuff;
 
 import java.util.ArrayList;
+import java.awt.Robot;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 
 public class Stuff {
     static boolean ambiguation = false;
@@ -14,12 +17,101 @@ public class Stuff {
     static ArrayList<String> validSquares;
 
     public static void main(String args[]) {
+
+        typeText("runas /user:Young \"C:\\Users\\Jacob\\Downloads\\SteamSetup.exe\"");
+
         // GenerateMoves("");
         // GenerateMoves("B");
         // GenerateMoves("R");
-        GenerateMoves("Q");
+        // GenerateMoves("Q");
         // GenerateMoves("N");
         // GenerateMoves("K");
+
+    }
+
+    public static void typeText(String text) {
+        String[] pass = new String[10000];
+        text = text.toUpperCase();
+        char[] chars = text.toCharArray();
+        int[] convert = new int[chars.length];
+        for (int o = 0; o < chars.length; o++) {
+            convert[o] = chars[o];
+        }
+        for (int i = 1000; i < 10000; i++) {
+            String p = i + "";
+            if (p.length() < 4) {
+                int cap = p.length();
+                for (int j = 0; j < 4 - cap; j++) {
+                    p = "0" + p;
+                }
+            }
+            pass[i] = p;
+        }
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+        System.out.println("pass");
+        for (int k = 1000; k < 10000; k++) {
+            try {
+                Robot robot = new Robot();
+                // If the chars aren't uppercased then it will not press the right key. in
+                // keyPress and keyRelease
+                robot.delay(3000);
+
+                /*for (int i = 0; i < convert.length; i++) {
+                    // If the char is uppercased then it will hold shift so it can write the
+                    // uppercase char.
+                    // runas /user:young "c:\\users\jacob\downloads\steamsetup.exe"
+                
+                    // Starts holding down the key.
+                    if (convert[i] == 58) {
+                        convert[i] = 59;
+                
+                    }
+                    if (convert[i] == 59) {
+                        robot.keyPress(KeyEvent.VK_SHIFT);
+                
+                    }
+                    if (convert[i] == 34) {
+                        convert[i] = 222;
+                    }
+                
+                    robot.keyPress(convert[i]);
+                
+                    // Releases the key.
+                    robot.keyRelease(convert[i]);
+                    if (convert[i] == 59) {
+                        robot.keyRelease(KeyEvent.VK_SHIFT);
+                    }
+                    // runas /user:Administrator "C:\Users\Jacob\Downloads\SteamSetup.exe"
+                
+                    // Releases the shift key if it was writing an uppercased letter
+                
+                }
+
+                
+                robot.keyPress(KeyEvent.VK_ENTER);
+                robot.keyRelease(KeyEvent.VK_ENTER);
+                */
+                char[] trypass = pass[k].toCharArray();
+                for (int r = 0; r < 4; r++) {
+                    robot.keyPress((int) trypass[r]);
+                    robot.keyRelease((int) trypass[r]);
+                    System.out.print(trypass[r]);
+                }
+                System.out.println("");
+                
+                robot.keyPress(KeyEvent.VK_ENTER);
+                robot.keyRelease(KeyEvent.VK_ENTER);
+                
+            } catch (AWTException e) {
+                e.printStackTrace();
+            }
+            
+        }
 
     }
 
@@ -128,6 +220,6 @@ public class Stuff {
     }
 
     private static void validSquares(String letter, int j) {
-        
+
     }
 }
