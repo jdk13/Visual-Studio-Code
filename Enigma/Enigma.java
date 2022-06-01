@@ -39,7 +39,26 @@ public class Enigma {
                     Caesar(code[1], shift);
 
                 } else if (code[0].startsWith(">A") || code[0].startsWith("<A")) {
-                    Substitute(code[1]);
+                	if(code[0].equalsIgnoreCase("<A")) {
+                		boolean decrypt = true;
+                		Substitute(code[1], decrypt);
+                	}
+                	else {
+                		Substitute(code[1], false);
+                	}
+                    
+                }
+                else if (code[0].startsWith(">R") || code[0].startsWith("<R")) {
+                	if(code[0].equalsIgnoreCase("<R")) {
+                		boolean decrypt = true;
+                		rotor = true;
+                		Substitute(code[1], decrypt);
+                	}
+                	else {
+                		rotor = true;
+                		Substitute(code[1], false);
+                	}
+                    
                 }
             }
 
@@ -89,7 +108,7 @@ public class Enigma {
         // }
     }
 
-    public static void Substitute(String code) {
+    public static void Substitute(String code, boolean b) {
         int rotorpos = 0;
         // EKMFLGDQVZNTOWYHXUSPAIBRCJ
         // AJDKSIRUXBLHWTMCQGZNPYFVOE
@@ -104,21 +123,34 @@ public class Enigma {
             if (s.equals(" ")) {
                 System.out.print(s); //space in hello world gets printed
             } else {
-                int index = Arrays.binarySearch(alphabet, s); //starting at h
+                int index = Arrays.binarySearch(alphabet, s.toUpperCase()); //starting at h
                 //we search for the position of 'H' in the alphabet array
                 // H appears in 7th position so index is 7
-                if (rotor) {
+                if (rotor && !b) {
                     //to make it through another rotor, 
                     
                     //rotor 0, pos 7 is Q, Q is 17
                     //rotor 1, pos 17 is Q, Q is 17
                     //rotor 2, pos 17 is I, I is 10
                     for (rotorpos = 0; rotorpos < 3; rotorpos++) {
-                        index = Arrays.binarySearch(alphabet, rotors[rotorpos][index]);
+                        index = index(alphabet, rotors[rotorpos][index], 0);
                     }
-                    
+                    rotorpos--;
+                    System.out.print(rotors[rotorpos][index]);
                 }
-                System.out.print(rotors[rotorpos][index]);
+                else if(rotor && b) {
+                	index = index(rotors[2], s, 0);
+                	for (rotorpos = 1; rotorpos > 0; rotorpos--) {
+                		//G to S is 18
+                		//S to E is 4
+                		//E to A is 0
+                		index = index(rotors[rotorpos], alphabet[index], 0);
+                    }
+                	index = index(rotors[0], alphabet[index], 0);
+                    rotorpos++;
+                    System.out.print(alphabet[index]);
+                }
+                
             }
         }
         System.out.println(" ");
@@ -129,4 +161,24 @@ public class Enigma {
         String[] test = s.split("");
         return test;
     }
+    public static int index(String arr[], String t, int start)
+    {
+         
+        // base case when
+        // start equals the length of the
+        // array we return -1
+        if(start==arr.length)
+            return -1;
+         
+        // if element at index start equals t
+        // we return start
+        if(arr[start].equalsIgnoreCase(t))
+            return start;
+         
+        // we find for the rest
+        // position in the array
+        return index(arr,t,start+1);
+    }
+    
+
 }
