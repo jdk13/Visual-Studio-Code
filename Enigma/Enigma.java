@@ -1,5 +1,4 @@
 package Enigma;
-
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -113,10 +112,19 @@ public class Enigma {
         // EKMFLGDQVZNTOWYHXUSPAIBRCJ
         // AJDKSIRUXBLHWTMCQGZNPYFVOE
         // BDFHJLCPRTXVZNYEIWGAKMUSQO
-        String[][] rotors = new String[3][26];
+        // ESOVPZJAYQUIRHXLNFTGKDCMWB
+        // VZBRGITYUPSDNHLXAWMJQOFECK
+        // YRUHQSLDPXNGOKMIEBFZCWVJAT
+        String[][] rotors = new String[5][26];
         rotors[0] = initializeRotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ");
         rotors[1] = initializeRotor("AJDKSIRUXBLHWTMCQGZNPYFVOE");
         rotors[2] = initializeRotor("BDFHJLCPRTXVZNYEIWGAKMUSQO");
+        rotors[3] = initializeRotor("ESOVPZJAYQUIRHXLNFTGKDCMWB");
+        rotors[4] = initializeRotor("VZBRGITYUPSDNHLXAWMJQOFECK");
+        //TODO Add Reflector
+        //TODO Add Plugboard
+
+
         String[] alphabet = initializeRotor("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         String[] split = code.split("");
         for (String s : split) { //example text "hello world"
@@ -128,7 +136,7 @@ public class Enigma {
                 // H appears in 7th position so index is 7
                 if (rotor && !b) {
                     //to make it through another rotor, 
-                    
+
                     //rotor 0, pos 7 is Q, Q is 17
                     //rotor 1, pos 17 is Q, Q is 17
                     //rotor 2, pos 17 is I, I is 10
@@ -137,25 +145,25 @@ public class Enigma {
                     }
                     rotorpos--;
                     System.out.print(rotors[rotorpos][index]);
-                }
-                else if(rotor && b) {
-                	index = index(rotors[2], s, 0);
-                	for (rotorpos = 1; rotorpos > 0; rotorpos--) {
-                		//G to S is 18
-                		//S to E is 4
-                		//E to A is 0
-                		index = index(rotors[rotorpos], alphabet[index], 0);
+                } else if (rotor && b) {
+                    index = index(rotors[2], s, 0);
+                    for (rotorpos = 1; rotorpos > 0; rotorpos--) {
+                        //G to S is 18
+                        //S to E is 4
+                        //E to A is 0
+                        index = index(rotors[rotorpos], alphabet[index], 0);
                     }
-                	index = index(rotors[0], alphabet[index], 0);
+                    index = index(rotors[0], alphabet[index], 0);
                     rotorpos++;
                     System.out.print(alphabet[index]);
                 }
-                
+
             }
         }
         System.out.println(" ");
 
     }
+    
 
     public static String[] initializeRotor(String s) {
         String[] test = s.split("");
@@ -178,6 +186,25 @@ public class Enigma {
         // we find for the rest
         // position in the array
         return index(arr,t,start+1);
+    }
+
+    public static void whole(String e) {
+        String[] reflect = initializeRotor("YRUHQSLDPXNGOKMIEBFZCWVJAT");
+    	/*1. Go Plugboard
+        2. Shift up Normal Alphabet
+        3. translate
+        4. Shift back down Normal Alphabet
+        5. Repeat 2-4 2 more times based off of rotor order
+        6. Reflects to new letter
+        7. Send it back in reverse (3,1,2 becomes 2,1,3)
+        8. Plugboard again*/
+        //TODO create the entire enigma method
+        
+        //Rotations
+        //Right rotor rotates with every letter
+        //Middle rotates with every rotation the right rotator takes
+        //Left rotates with eevry rotation the middle rotor takes
+        //TODO construct rotations
     }
     
 
