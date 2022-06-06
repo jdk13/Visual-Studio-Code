@@ -140,10 +140,10 @@ public class Enigma {
                     //rotor 0, pos 7 is Q, Q is 17
                     //rotor 1, pos 17 is Q, Q is 17
                     //rotor 2, pos 17 is I, I is 10
-                    for (rotorpos = 0; rotorpos < 3; rotorpos++) {
+                    for (rotorpos = 0; rotorpos < 2; rotorpos++) {
                         index = index(alphabet, rotors[rotorpos][index], 0);
                     }
-                    rotorpos--;
+                    
                     System.out.print(rotors[rotorpos][index]);
                 } else if (rotor && b) {
                     index = index(rotors[2], s, 0);
@@ -190,7 +190,7 @@ public class Enigma {
 
     public static void whole(String e) {
         String[] reflect = initializeRotor("YRUHQSLDPXNGOKMIEBFZCWVJAT");
-    	/*1. Go Plugboard
+        /*1. Go Plugboard
         2. Shift up Normal Alphabet
         3. translate
         4. Shift back down Normal Alphabet
@@ -199,12 +199,16 @@ public class Enigma {
         7. Send it back in reverse (3,1,2 becomes 2,1,3)
         8. Plugboard again*/
         //TODO create the entire enigma method
-        
+
         //Rotations
         //Right rotor rotates with every letter
         //Middle rotates with every rotation the right rotator takes
         //Left rotates with eevry rotation the middle rotor takes
         //TODO construct rotations
+    }
+
+    public static String Encrypt(String letter, int rotor) {
+        return letter;
     }
     
 
