@@ -4,17 +4,18 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Enigma {
+    static String[][] rotors = new String[5][26];
+    static String[] alphabet;
     static boolean rotor = false;
 
     public static void main(String[] args) {
         Scanner e = new Scanner(System.in);
-        String[][] rotors = new String[5][26];
         rotors[0] = initializeRotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ");
         rotors[1] = initializeRotor("AJDKSIRUXBLHWTMCQGZNPYFVOE");
         rotors[2] = initializeRotor("BDFHJLCPRTXVZNYEIWGAKMUSQO");
         rotors[3] = initializeRotor("ESOVPZJAYQUIRHXLNFTGKDCMWB");
         rotors[4] = initializeRotor("VZBRGITYUPSDNHLXAWMJQOFECK");
-        String[] alphabet = initializeRotor("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+        alphabet = initializeRotor("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
         int LeftShift = 0;
         int midshift = 0;
         int RightShift = 0;
@@ -25,6 +26,10 @@ public class Enigma {
             quit = false;
             String input = e.nextLine();
             String[] code = input.split(" ");
+            if(code.length > 15) {
+            	whole(code);
+            }
+            else          
             if (code.length > 2) {
                 for (int i = 2; i < code.length; i++) {
                     code[1] += " " + code[i];
@@ -82,18 +87,36 @@ public class Enigma {
                             if (s.equals(" ")) {
                                 System.out.print(" ");
                             } else {
+                            	String snip = s;
                                 int index = 0;
                                 for (int i = 2; i > -1; i--) {
-                                    index = Decrypt(s, i);
+                                    index = Decrypt(snip, i);
+                                    snip = alphabet[index];
                                 }
+                                
                                 System.out.print(alphabet[index]);
                             }
 
                         }
                         System.out.println(" ");
                     } else {
-                        rotor = true;
-                        Substitute(code[1], false);
+                    	String[] split = initializeRotor(code[1]);
+                    	for (String s : split) {
+                            if (s.equals(" ")) {
+                                System.out.print(" ");
+                            } else {
+                            	String snip = s;
+                                int index = 0;
+                                for (int i = 0; i < 3; i++) {
+                                    index = Encrypt(snip, i);
+                                    snip = rotors[i][index];
+                                }
+                                
+                                System.out.print(rotors[2][index]);
+                            }
+
+                        }
+                    	System.out.println(" ");
                     }
 
                 } else {
@@ -148,64 +171,7 @@ public class Enigma {
         // }
     }
 
-    public static void Substitute(String code, boolean b) {
-        int rotorpos = 0;
-        String[][] rotors = new String[5][26];
-        rotors[0] = initializeRotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ");
-        rotors[1] = initializeRotor("AJDKSIRUXBLHWTMCQGZNPYFVOE");
-        rotors[2] = initializeRotor("BDFHJLCPRTXVZNYEIWGAKMUSQO");
-        rotors[3] = initializeRotor("ESOVPZJAYQUIRHXLNFTGKDCMWB");
-        rotors[4] = initializeRotor("VZBRGITYUPSDNHLXAWMJQOFECK");
-        String[] alphabet = initializeRotor("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        // TODO Add Reflector
-        // TODO Add Plugboard
-
-        String[] split = code.split("");
-        for (String s : split) { // example text "hello world"
-            if (s.equals(" ")) {
-                System.out.print(s); // space in hello world gets printed
-            } else {
-                int index = Arrays.binarySearch(alphabet, s.toUpperCase()); // starting at h
-                // we search for the position of 'H' in the alphabet array
-                // H appears in 7th position so index is 7
-                if (rotor && !b) {
-                    // to make it through another rotor,
-
-                    // rotor 0, pos 7 is Q, Q is 17
-                    // rotor 1, pos 17 is Q, Q is 17
-                    // rotor 2, pos 17 is I, I is 10
-                    for (rotorpos = 0; rotorpos < 3; rotorpos++) {
-                        index = index(alphabet, rotors[rotorpos][index], 0);
-                    }
-                    rotorpos--;
-                    System.out.print(rotors[rotorpos][index]);
-                } else if (rotor && b) {
-                    index = index(rotors[2], s, 0);
-                    for (rotorpos = 1; rotorpos > 0; rotorpos--) {
-                        // G to S is 18
-                        // S to E is 4
-                        // E to A is 0
-                        index = index(rotors[rotorpos], alphabet[index], 0);
-                    }
-                    index = index(rotors[0], alphabet[index], 0);
-                    rotorpos++;
-                    System.out.print(alphabet[index]);
-                }
-
-            }
-        }
-        for (String s : split) {
-            if (s.equals(" ")) {
-                System.out.print(s); // space in hello world gets printed
-            } else {
-                if (rotor && !b) {
-
-                }
-            }
-        }
-        System.out.println(" ");
-
-    }
+    
 
     public static String[] initializeRotor(String s) {
         String[] test = s.split("");
@@ -224,8 +190,12 @@ public class Enigma {
         return index(arr, t, start + 1);
     }
 
-    public static void whole(String e) {
+    public static void whole(String[] code) {
         String[] reflect = initializeRotor("YRUHQSLDPXNGOKMIEBFZCWVJAT");
+        String[][] rotorsettings = new String[3][26];
+        for(int i = 0; i < 3; i++) {
+        	
+        }
         /*
          * 1. Go Plugboard
          * 2. Shift up Normal Alphabet
@@ -246,26 +216,16 @@ public class Enigma {
     }
 
     public static int Encrypt(String letter, int Rotor) {
-        String[][] rotors = new String[5][26];
-        rotors[0] = initializeRotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ");
-        rotors[1] = initializeRotor("AJDKSIRUXBLHWTMCQGZNPYFVOE");
-        rotors[2] = initializeRotor("BDFHJLCPRTXVZNYEIWGAKMUSQO");
-        rotors[3] = initializeRotor("ESOVPZJAYQUIRHXLNFTGKDCMWB");
-        rotors[4] = initializeRotor("VZBRGITYUPSDNHLXAWMJQOFECK");
-        String[] alphabet = initializeRotor("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        int index = Arrays.binarySearch(alphabet, letter.toUpperCase());
+        
+        int index = index(alphabet, letter, 0);
 
         return index;
 
     }
 
     public static int Decrypt(String letter, int Rotor) {
-        String[][] rotors = new String[5][26];
-        rotors[0] = initializeRotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ");
-        rotors[1] = initializeRotor("AJDKSIRUXBLHWTMCQGZNPYFVOE");
-        rotors[2] = initializeRotor("BDFHJLCPRTXVZNYEIWGAKMUSQO");
-        rotors[3] = initializeRotor("ESOVPZJAYQUIRHXLNFTGKDCMWB");
-        rotors[4] = initializeRotor("VZBRGITYUPSDNHLXAWMJQOFECK");
+        
+        //int index = index(alphabet, letter, 0);
 
         int index = index(rotors[Rotor], letter, 0);
 
