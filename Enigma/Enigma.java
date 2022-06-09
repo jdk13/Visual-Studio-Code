@@ -1,14 +1,18 @@
 package Enigma;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Enigma {
     static String[][] rotors = new String[5][26];
     static String[] alphabet;
     static boolean rotor = false;
+    static int LeftShift;
+    static int midshift;
+    static int RightShift;
+    static boolean quit;
 
     public static void main(String[] args) {
+        Crack("");
         Scanner e = new Scanner(System.in);
         rotors[0] = initializeRotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ");
         rotors[1] = initializeRotor("AJDKSIRUXBLHWTMCQGZNPYFVOE");
@@ -16,21 +20,19 @@ public class Enigma {
         rotors[3] = initializeRotor("ESOVPZJAYQUIRHXLNFTGKDCMWB");
         rotors[4] = initializeRotor("VZBRGITYUPSDNHLXAWMJQOFECK");
         alphabet = initializeRotor("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-        int LeftShift = 0;
-        int midshift = 0;
-        int RightShift = 0;
-        boolean quit = false;
+
         while (!quit) {
+            LeftShift = 0;
+            midshift = 0;
+            RightShift = 0;
             rotor = false;
             System.out.print("Enter: ");
             quit = false;
             String input = e.nextLine();
             String[] code = input.split(" ");
-            if(code.length > 15) {
-            	whole(code);
-            }
-            else          
-            if (code.length > 2) {
+            if (code.length > 15) {
+                whole(code);
+            } else if (code.length > 2) {
                 for (int i = 2; i < code.length; i++) {
                     code[1] += " " + code[i];
                 }
@@ -87,36 +89,36 @@ public class Enigma {
                             if (s.equals(" ")) {
                                 System.out.print(" ");
                             } else {
-                            	String snip = s;
+                                String snip = s;
                                 int index = 0;
                                 for (int i = 2; i > -1; i--) {
                                     index = Decrypt(snip, i);
                                     snip = alphabet[index];
                                 }
-                                
+
                                 System.out.print(alphabet[index]);
                             }
 
                         }
                         System.out.println(" ");
                     } else {
-                    	String[] split = initializeRotor(code[1]);
-                    	for (String s : split) {
+                        String[] split = initializeRotor(code[1]);
+                        for (String s : split) {
                             if (s.equals(" ")) {
                                 System.out.print(" ");
                             } else {
-                            	String snip = s;
+                                String snip = s;
                                 int index = 0;
                                 for (int i = 0; i < 3; i++) {
                                     index = Encrypt(snip, i);
                                     snip = rotors[i][index];
                                 }
-                                
+
                                 System.out.print(rotors[2][index]);
                             }
 
                         }
-                    	System.out.println(" ");
+                        System.out.println(" ");
                     }
 
                 } else {
@@ -171,8 +173,6 @@ public class Enigma {
         // }
     }
 
-    
-
     public static String[] initializeRotor(String s) {
         String[] test = s.split("");
         return test;
@@ -193,9 +193,39 @@ public class Enigma {
     public static void whole(String[] code) {
         String[] reflect = initializeRotor("YRUHQSLDPXNGOKMIEBFZCWVJAT");
         String[][] rotorsettings = new String[3][26];
-        for(int i = 0; i < 3; i++) {
-        	
+        // this sets up the order of rotors
+        for (int i = 0; i < 3; i++) {
+            if (code[i].equalsIgnoreCase("I")) {
+                rotorsettings[i] = rotors[0];
+            }
+            if (code[i].equalsIgnoreCase("II")) {
+                rotorsettings[i] = rotors[1];
+            }
+            if (code[i].equalsIgnoreCase("III")) {
+                rotorsettings[i] = rotors[2];
+            }
+            if (code[i].equalsIgnoreCase("IV")) {
+                rotorsettings[i] = rotors[3];
+            }
+            if (code[i].equalsIgnoreCase("V")) {
+                rotorsettings[i] = rotors[0];
+            }
+
         }
+        // this sets up the shifts
+
+        for (int i = 3; i < 6; i++) {
+            if (i == 3) {
+                LeftShift = index(alphabet, code[i], 0);
+            }
+            if (i == 4) {
+                midshift = index(alphabet, code[i], 0);
+            }
+            if (i == 5) {
+                RightShift = index(alphabet, code[i], 0);
+            }
+        }
+
         /*
          * 1. Go Plugboard
          * 2. Shift up Normal Alphabet
@@ -216,7 +246,7 @@ public class Enigma {
     }
 
     public static int Encrypt(String letter, int Rotor) {
-        
+
         int index = index(alphabet, letter, 0);
 
         return index;
@@ -224,12 +254,76 @@ public class Enigma {
     }
 
     public static int Decrypt(String letter, int Rotor) {
-        
-        //int index = index(alphabet, letter, 0);
+
+        // int index = index(alphabet, letter, 0);
 
         int index = index(rotors[Rotor], letter, 0);
 
         return index;
+
+    }
+
+    public static void Crack(String s) {
+        // KJKRVCZFIQDUDHSBCGIKVJQEMBUXWWBGOBEKMQIXFODK
+        // COMPUTER
+        int[] indexes = new int[] { 0, 1, 2, 3, 4, 6, 8, 9, 10, 11, 12, 13, 14, 15, 18, 19, 20, 21, 23, 24, 25, 26, 27,
+                29, 30, 32, 33, 35 };
+        String[] key = initializeRotor("COMPUTER");
+        int test = 0;
+        int[][][] rotorpos = new int[5][12][3];
+        String[] code = initializeRotor("KJKRVCZFIQDUDHSBCGIKVJQEMBUXWWBGOBEKMQIXFODK");
+        int mid = 0;
+        for (int y = 0; y < 5; y++) {
+            mid = 0;
+            for (int z = 0; z < 5; z++) {
+                for (int a = 0; a < 5; a++) {
+                    if (!(y == z) && !(z == a) && !(a == y)) {
+                        rotorpos[y][mid][0] = y;
+                        rotorpos[y][mid][1] = z;
+                        rotorpos[y][mid][2] = a;
+
+                        mid++;
+                    }
+
+                }
+
+            }
+        }
+
+        // there are 10 pairs and 6 empty
+        // KJKRVCZF
+        // COMPUTER
+        // C goes to K
+        // assume C goes to A
+        // A gets sent through 3 and
+        //loop through possible COMPUTER locations
+        // the loop through possible rotor combinations (there's about 60 of them)
+        //loop through shifts
+        // loop through plugboards
+
+        for (int i : indexes) {
+            for (int[][] rot : rotorpos) {
+                for (int[] rot2 : rot) {
+                    String[][] rotorsettings = new String[3][26];
+
+                    // here we initialize rotor settings
+                    rotorsettings[0] = rotors[rot2[0]];
+                    rotorsettings[1] = rotors[rot2[1]];
+                    rotorsettings[2] = rotors[rot2[2]];
+                    for (int k = 0; k < 25; k++) {
+                        for (int l = 0; k < 25; k++) {
+                            for (int m = 0; k < 25; k++) {
+                                for (int n = 0; n < 26; n++) {
+                                    
+                                }
+                            }
+
+                        }
+                    }
+                    
+                }
+            }
+        }
 
     }
 

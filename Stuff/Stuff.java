@@ -18,7 +18,8 @@ public class Stuff {
 
     public static void main(String args[]) {
 
-        typeText("runas /user:Young \"C:\\Users\\Jacob\\Downloads\\SteamSetup.exe\"");
+        //typeText("runas /user:Young \"C:\\Users\\Jacob\\Downloads\\SteamSetup.exe\"");
+        possiblePlugboard();
 
         // GenerateMoves("");
         // GenerateMoves("B");
@@ -29,7 +30,7 @@ public class Stuff {
 
     }
 
-    public static void typeText(String text) {
+    /*public static void typeText(String text) {
         String[] pass = new String[10000];
         text = text.toUpperCase();
         char[] chars = text.toCharArray();
@@ -95,7 +96,7 @@ public class Stuff {
                 
                 robot.keyPress(KeyEvent.VK_ENTER);
                 robot.keyRelease(KeyEvent.VK_ENTER);
-                */
+                
                 char[] trypass = pass[k].toCharArray();
                 for (int r = 0; r < 4; r++) {
                     robot.keyPress((int) trypass[r]);
@@ -113,6 +114,15 @@ public class Stuff {
             
         }
 
+    }
+    */
+    
+
+    private static void possiblePlugboard() {
+        int comb = 0;
+        for (int i = 0; i < 26; i++) {
+            
+        }
     }
 
     private static void GenerateMoves(String piece) {
