@@ -12,7 +12,7 @@ public class Enigma {
     static boolean quit;
 
     public static void main(String[] args) {
-        Crack("");
+        // Crack("");
         Scanner e = new Scanner(System.in);
         rotors[0] = initializeRotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ");
         rotors[1] = initializeRotor("AJDKSIRUXBLHWTMCQGZNPYFVOE");
@@ -31,7 +31,7 @@ public class Enigma {
             String input = e.nextLine();
             String[] code = input.split(" ");
             if (code.length > 15) {
-                whole(code);
+                whole(code, false, 0);
             } else if (code.length > 2) {
                 for (int i = 2; i < code.length; i++) {
                     code[1] += " " + code[i];
@@ -132,7 +132,7 @@ public class Enigma {
 
     }
 
-    public static void Caesar(String code, int shift) {
+    public static String Caesar(String code, int shift) {
         String[] split = code.split("");
         for (String letter : split) {
 
@@ -151,7 +151,7 @@ public class Enigma {
                     if (i <= 64) {
                         w += 26;
                     }
-                    System.out.print(w);
+                    return w + "";
                 } else if (i > 96 && i < 123) {
                     w += shift;
                     if (i >= 123) {
@@ -160,13 +160,13 @@ public class Enigma {
                     if (i <= 96) {
                         w += 26;
                     }
-                    System.out.print(w);
+                    return w + "";
                 }
 
             }
 
         }
-        System.out.print("\n");
+        return code;
 
         // for (char alphabet = 'A'; alphabet <= 'Z'; alphabet++) {
         // System.out.println(alphabet);
@@ -190,28 +190,14 @@ public class Enigma {
         return index(arr, t, start + 1);
     }
 
-    public static void whole(String[] code) {
-        String[] reflect = initializeRotor("YRUHQSLDPXNGOKMIEBFZCWVJAT");
-        String[][] rotorsettings = new String[3][26];
-        // this sets up the order of rotors
-        for (int i = 0; i < 3; i++) {
-            if (code[i].equalsIgnoreCase("I")) {
-                rotorsettings[i] = rotors[0];
-            }
-            if (code[i].equalsIgnoreCase("II")) {
-                rotorsettings[i] = rotors[1];
-            }
-            if (code[i].equalsIgnoreCase("III")) {
-                rotorsettings[i] = rotors[2];
-            }
-            if (code[i].equalsIgnoreCase("IV")) {
-                rotorsettings[i] = rotors[3];
-            }
-            if (code[i].equalsIgnoreCase("V")) {
-                rotorsettings[i] = rotors[0];
-            }
+    public static void whole(String[] code, boolean crack, int index2) {
+        String[][] plugboard = new String[10][2];
 
-        }
+        String[][] rotorsettings = rotorsettings(code);
+        int[] notch = notches(code);
+
+        // this sets up the order of rotors
+
         // this sets up the shifts
 
         for (int i = 3; i < 6; i++) {
@@ -224,6 +210,99 @@ public class Enigma {
             if (i == 5) {
                 RightShift = index(alphabet, code[i], 0);
             }
+        }
+
+        for (int i = 6; i < 16; i++) {
+            plugboard[i - 6][0] = code[i].substring(0, 1);
+            plugboard[i - 6][1] = code[i].substring(1);
+        }
+        if (code.length > 16) {
+            for (int i = 17; i < code.length; i++) {
+                code[15] += code[i];
+            }
+        }
+        boolean turn = false;
+        boolean turnagain = false;
+
+        String[] text = initializeRotor(code[16]);
+        turn = false;
+
+        for (int i = 0; i < text.length; i++) {
+            turn = false;
+            RightShift++;
+            if (RightShift == notch[2]) {
+                turn = true;
+            }
+            if (RightShift == 26) {
+                RightShift = 0;
+            }
+
+            String fp = plugboard(plugboard, text[i]);
+            translate(fp, RightShift, midshift, LeftShift, rotorsettings);
+            fp = plugboard(plugboard, fp);
+            if (crack) {
+                if (i == index2) {
+                    if (!fp.equals("C")) {
+                        return;
+                    }
+                }
+                if (i == index2) {
+                    if (!fp.equals("O")) {
+                        return;
+                    }
+                }
+                if (i == index2) {
+                    if (!fp.equals("M")) {
+                        return;
+                    }
+                }
+                if (i == index2) {
+                    if (!fp.equals("P")) {
+                        return;
+                    }
+                }
+                if (i == index2) {
+                    if (!fp.equals("U")) {
+                        return;
+                    }
+                }
+                if (i == index2) {
+                    if (!fp.equals("T")) {
+                        return;
+                    }
+                }
+                if (i == index2) {
+                    if (!fp.equals("E")) {
+                        return;
+                    }
+                }
+                if (i == index2) {
+                    if (!fp.equals("R")) {
+                        return;
+                    }
+                }
+
+            }
+            System.out.print(fp);
+            if (crack) {
+                for (String s : code)
+                    System.out.print(" " + s);
+            }
+            // double steppings
+            if (turnagain) {
+                midshift++;
+                LeftShift++;
+            }
+
+            turnagain = false;
+            // this part deals with shiftings after every key press
+            if (turn) {
+                midshift++;
+                if (midshift == notch[1]) {
+                    turnagain = true;
+                }
+            }
+
         }
 
         /*
@@ -266,27 +345,62 @@ public class Enigma {
     public static void Crack(String s) {
         // KJKRVCZFIQDUDHSBCGIKVJQEMBUXWWBGOBEKMQIXFODK
         // COMPUTER
+        String encoded = "KJKRVCZFIQDUDHSBCGIKVJQEMBUXWWBGOBEKMQIXFODK";
+        String[] encipher = initializeRotor(encoded);
+        String[] key = initializeRotor("COMPUTER");
         int[] indexes = new int[] { 0, 1, 2, 3, 4, 6, 8, 9, 10, 11, 12, 13, 14, 15, 18, 19, 20, 21, 23, 24, 25, 26, 27,
                 29, 30, 32, 33, 35 };
-        String[] key = initializeRotor("COMPUTER");
-        int test = 0;
-        int[][][] rotorpos = new int[5][12][3];
-        String[] code = initializeRotor("KJKRVCZFIQDUDHSBCGIKVJQEMBUXWWBGOBEKMQIXFODK");
-        int mid = 0;
-        for (int y = 0; y < 5; y++) {
-            mid = 0;
-            for (int z = 0; z < 5; z++) {
-                for (int a = 0; a < 5; a++) {
-                    if (!(y == z) && !(z == a) && !(a == y)) {
-                        rotorpos[y][mid][0] = y;
-                        rotorpos[y][mid][1] = z;
-                        rotorpos[y][mid][2] = a;
+        String[] testcode = new String[17];
+        testcode[16] = encoded;
+        for (int ii : indexes) {
+            for (int y = 0; y < 5; y++) {
+                for (int z = 0; z < 5; z++) {
+                    for (int a = 0; a < 5; a++) {
+                        if (!(y == z) && !(z == a) && !(a == y)) {
+                            testcode[0] = Roman(y);
+                            testcode[1] = Roman(z);
+                            testcode[2] = Roman(a);
+                            for (int i = 0; i < 26; i++) {
+                                String[][] rotorsettings = rotorsettings(testcode);
+                                testcode[3] = alphabet[i];
+                                for (int j = 0; j < 26; j++) {
+                                    testcode[4] = alphabet[j];
+                                    for (int k = 0; k < 26; k++) {
+                                        testcode[5] = alphabet[k];
+                                        // Assume First letter goes to something
+                                        // plug that in and get other letter
+                                        // KJKRVCZFIQDUDHSBCGIKVJQEMBUXWWBGOBEKMQIXFODK
+                                        // COMPUTER
+                                        boolean incorrect = true;
+                                        
+                                        String[][] pairs = new String[10][2];
+                                        // looking at encipher[indexes] and key[0]
 
-                        mid++;
+                                        for (int h = 0; h < 25; h++) {
+                                            // TRY K goes to A, B, C, D... Y, Z;
+                                            // build off of that
+                                            pairs[0][0] = encipher[ii];
+                                            if (!(h == index(alphabet, encipher[ii], 0))) {
+                                                pairs[0][1] = alphabet[h];
+                                                String output = translate(pairs[0][1], k, j, i, rotorsettings);
+                                                pairs[1][0] = output;
+                                                pairs[1][1] = key[0];
+                                                for (int t = 0; t < 10; t++) {
+                                                    for (int v = 0; v < 2; v++) {
+                                                        
+                                                    }
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+
                     }
 
                 }
-
             }
         }
 
@@ -296,35 +410,122 @@ public class Enigma {
         // C goes to K
         // assume C goes to A
         // A gets sent through 3 and
-        //loop through possible COMPUTER locations
+        // loop through possible COMPUTER locations
         // the loop through possible rotor combinations (there's about 60 of them)
-        //loop through shifts
+        // loop through shifts
         // loop through plugboards
 
-        for (int i : indexes) {
-            for (int[][] rot : rotorpos) {
-                for (int[] rot2 : rot) {
-                    String[][] rotorsettings = new String[3][26];
+    }
 
-                    // here we initialize rotor settings
-                    rotorsettings[0] = rotors[rot2[0]];
-                    rotorsettings[1] = rotors[rot2[1]];
-                    rotorsettings[2] = rotors[rot2[2]];
-                    for (int k = 0; k < 25; k++) {
-                        for (int l = 0; k < 25; k++) {
-                            for (int m = 0; k < 25; k++) {
-                                for (int n = 0; n < 26; n++) {
-                                    
-                                }
-                            }
+    private static String[] configurePlug(String[] test) {
 
-                        }
-                    }
-                    
-                }
+        return test;
+
+    }
+
+    public static String plugboard(String[][] plugboard, String a) {
+        for (String[] first : plugboard) {
+            if (a.equalsIgnoreCase(first[0])) {
+                return first[1];
+            } else if (a.equalsIgnoreCase(first[1])) {
+                return first[0];
             }
         }
+        return a;
+    }
 
+    public static String[][] rotorsettings(String[] code) {
+        String[][] rotorsettings = new String[3][26];
+        for (int i = 0; i < 3; i++) {
+            if (code[i].equalsIgnoreCase("I")) {
+                rotorsettings[i] = rotors[0];
+            }
+            if (code[i].equalsIgnoreCase("II")) {
+                rotorsettings[i] = rotors[1];
+            }
+            if (code[i].equalsIgnoreCase("III")) {
+                rotorsettings[i] = rotors[2];
+            }
+            if (code[i].equalsIgnoreCase("IV")) {
+                rotorsettings[i] = rotors[3];
+            }
+            if (code[i].equalsIgnoreCase("V")) {
+                rotorsettings[i] = rotors[4];
+            }
+
+        }
+        return rotorsettings;
+    }
+
+    public static int[] notches(String[] code) {
+        int[] notch = new int[3];
+        for (int i = 0; i < 3; i++) {
+            if (code[i].equalsIgnoreCase("I")) {
+                notch[i] = 16;
+            }
+            if (code[i].equalsIgnoreCase("II")) {
+                notch[i] = 4;
+            }
+            if (code[i].equalsIgnoreCase("III")) {
+                notch[i] = 21;
+            }
+            if (code[i].equalsIgnoreCase("IV")) {
+                notch[i] = 9;
+            }
+            if (code[i].equalsIgnoreCase("V")) {
+                notch[i] = 25;
+            }
+        }
+        return notch;
+    }
+
+    public static String Roman(int i) {
+        if (i == 0) {
+            return "I";
+        }
+        if (i == 1) {
+            return "II";
+        }
+        if (i == 2) {
+            return "III";
+        }
+        if (i == 3) {
+            return "IV";
+        }
+        if (i == 4) {
+            return "V";
+        }
+        return null;
+    }
+
+    public static String translate(String fp, int RightShift, int midshift, int LeftShift, String[][] rotorsettings) {
+        String[] reflect = initializeRotor("YRUHQSLDPXNGOKMIEBFZCWVJAT");
+        fp = Caesar(fp, RightShift);
+        int index = index(alphabet, fp, 0);
+        fp = rotorsettings[2][index];
+        fp = Caesar(fp, RightShift * -1);
+        fp = Caesar(fp, midshift);
+        index = index(alphabet, fp, 0);
+        fp = rotorsettings[1][index];
+        fp = Caesar(fp, midshift * -1);
+        fp = Caesar(fp, LeftShift);
+        index = index(alphabet, fp, 0);
+        fp = rotorsettings[0][index];
+        fp = Caesar(fp, LeftShift * -1);
+        index = index(alphabet, fp, 0);
+        fp = reflect[index];
+        fp = Caesar(fp, LeftShift);
+        index = index(rotorsettings[0], fp, 0);
+        fp = alphabet[index];
+        fp = Caesar(fp, LeftShift * -1);
+        fp = Caesar(fp, midshift);
+        index = index(rotorsettings[1], fp, 0);
+        fp = alphabet[index];
+        fp = Caesar(fp, midshift * -1);
+        fp = Caesar(fp, RightShift);
+        index = index(rotorsettings[2], fp, 0);
+        fp = alphabet[index];
+        return fp = Caesar(fp, RightShift * -1);
     }
 
 }
