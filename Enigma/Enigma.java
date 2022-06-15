@@ -373,10 +373,13 @@ public class Enigma {
                                         // COMPUTER
                                         boolean incorrect = true;
                                         
-                                        String[][] pairs = new String[10][2];
+                                        //String[][] pairs = new String[10][2];
                                         // looking at encipher[indexes] and key[0]
+                                        for (int v = 0; v < 26; v++) {
+                                            
+                                        }
 
-                                        for (int h = 0; h < 25; h++) {
+                                        /*for (int h = 0; h < 25; h++) {
                                             // TRY K goes to A, B, C, D... Y, Z;
                                             // build off of that
                                             pairs[0][0] = encipher[ii];
@@ -391,7 +394,8 @@ public class Enigma {
                                                     }
                                                 }
                                             }
-                                        }
+
+                                        }*/
 
                                     }
                                 }
