@@ -1,5 +1,9 @@
 package Enigma;
 
+// Jacob Kim
+// AP Computer Science
+// Period 6
+// Enigma
 import java.util.Scanner;
 
 public class Enigma {
@@ -238,51 +242,53 @@ public class Enigma {
             }
 
             String fp = plugboard(plugboard, text[i]);
-            translate(fp, RightShift, midshift, LeftShift, rotorsettings);
+            fp = translate(fp, RightShift, midshift, LeftShift, rotorsettings);
             fp = plugboard(plugboard, fp);
-            if (crack) {
-                if (i == index2) {
-                    if (!fp.equals("C")) {
-                        return;
-                    }
-                }
-                if (i == index2) {
-                    if (!fp.equals("O")) {
-                        return;
-                    }
-                }
-                if (i == index2) {
-                    if (!fp.equals("M")) {
-                        return;
-                    }
-                }
-                if (i == index2) {
-                    if (!fp.equals("P")) {
-                        return;
-                    }
-                }
-                if (i == index2) {
-                    if (!fp.equals("U")) {
-                        return;
-                    }
-                }
-                if (i == index2) {
-                    if (!fp.equals("T")) {
-                        return;
-                    }
-                }
-                if (i == index2) {
-                    if (!fp.equals("E")) {
-                        return;
-                    }
-                }
-                if (i == index2) {
-                    if (!fp.equals("R")) {
-                        return;
-                    }
-                }
-
-            }
+            /*
+             * if (crack) {
+             * if (i == index2) {
+             * if (!fp.equals("C")) {
+             * return;
+             * }
+             * }
+             * if (i == index2) {
+             * if (!fp.equals("O")) {
+             * return;
+             * }
+             * }
+             * if (i == index2) {
+             * if (!fp.equals("M")) {
+             * return;
+             * }
+             * }
+             * if (i == index2) {
+             * if (!fp.equals("P")) {
+             * return;
+             * }
+             * }
+             * if (i == index2) {
+             * if (!fp.equals("U")) {
+             * return;
+             * }
+             * }
+             * if (i == index2) {
+             * if (!fp.equals("T")) {
+             * return;
+             * }
+             * }
+             * if (i == index2) {
+             * if (!fp.equals("E")) {
+             * return;
+             * }
+             * }
+             * if (i == index2) {
+             * if (!fp.equals("R")) {
+             * return;
+             * }
+             * }
+             * 
+             * }
+             */
             System.out.print(fp);
             if (crack) {
                 for (String s : code)
@@ -322,6 +328,36 @@ public class Enigma {
         // Middle rotates with every rotation the right rotator takes
         // Left rotates with eevry rotation the middle rotor takes
         // TODO construct rotations
+    }
+
+    public static String translate(String fp, int RightShift, int midshift, int LeftShift, String[][] rotorsettings) {
+        String[] reflect = initializeRotor("YRUHQSLDPXNGOKMIEBFZCWVJAT");
+        fp = Caesar(fp, RightShift);
+        int index = index(alphabet, fp, 0);
+        fp = rotorsettings[2][index];
+        fp = Caesar(fp, RightShift * -1);
+        fp = Caesar(fp, midshift);
+        index = index(alphabet, fp, 0);
+        fp = rotorsettings[1][index];
+        fp = Caesar(fp, midshift * -1);
+        fp = Caesar(fp, LeftShift);
+        index = index(alphabet, fp, 0);
+        fp = rotorsettings[0][index];
+        fp = Caesar(fp, LeftShift * -1);
+        index = index(alphabet, fp, 0);
+        fp = reflect[index];
+        fp = Caesar(fp, LeftShift);
+        index = index(rotorsettings[0], fp, 0);
+        fp = alphabet[index];
+        fp = Caesar(fp, LeftShift * -1);
+        fp = Caesar(fp, midshift);
+        index = index(rotorsettings[1], fp, 0);
+        fp = alphabet[index];
+        fp = Caesar(fp, midshift * -1);
+        fp = Caesar(fp, RightShift);
+        index = index(rotorsettings[2], fp, 0);
+        fp = alphabet[index];
+        return fp = Caesar(fp, RightShift * -1);
     }
 
     public static int Encrypt(String letter, int Rotor) {
@@ -371,35 +407,13 @@ public class Enigma {
                                         // plug that in and get other letter
                                         // KJKRVCZFIQDUDHSBCGIKVJQEMBUXWWBGOBEKMQIXFODK
                                         // COMPUTER
+                                        String[][] pairs = new String[10][2];
                                         boolean incorrect = true;
+                                        // <ArrayList>
+                                        // configureplug(pairs, remain);
 
                                         // String[][] pairs = new String[10][2];
                                         // looking at encipher[indexes] and key[0]
-                                        for (int v = 0; v < 26; v++) {
-                                            for (int vv = 0; vv < 26; vv++) {
-                                                String pair1 = alphabet[v] + alphabet[vv];
-                                                if (v < vv || v == vv) {
-                                                    continue;
-                                                }
-                                                for (int vvv = 0; vvv < 26; v++) {
-                                                    for (int vvvv = 0; vvvv < 26; vvvv++) {
-                                                        for (int vvvvv = 0; vvvvv < 26; vvvvv++) {
-                                                            for (int vvvvvv = 0; vvvvvv < 26; vvvvvv++) {
-                                                                for (int vvvvvvv = 0; vvvvvv < 26; vvvvvvv++) {
-                                                                    for (int vvvvvvvv = 0; vvvvvv < 26; vvvvvvvv++) {
-
-                                                                    }
-
-                                                                }
-                                                            }
-
-                                                        }
-                                                    }
-
-                                                }
-                                            }
-
-                                        }
 
                                         /*
                                          * for (int h = 0; h < 25; h++) {
@@ -444,10 +458,35 @@ public class Enigma {
         // loop through plugboards
 
     }
+    // FIRST ITERATION
+    // K ---> ?
+    // loop A - Z and null
+    // translate letter
+    // output = C ----> ?
+    // if any are 
 
-    private static String[] configurePlug(String[] test) {
+    private static String[] configurePlug(String[] plug, String[] code, String[] key, int index, boolean input){
+     //this index covers for arrays, and another index will call this method to determine the parts of the code it will use
+      	int codeindex = index(alphabet, code[index], 0);
+        int keyindex = index(alphabet, key[index], 0);
+        // code -  KJKRVCZF
+        // key - COMPUTER
+        // K ---> ? ---- ? ---> C
+        // J ---> ? ---- ? ---> O
+        // K ---> ? ---- ? ---> M
+        // R ---> ? ---- ? ---> P
+        // V ---> ? ---- ? ---> U
+        //
 
-        return test;
+     
+    	for(int i = 0; i < 27; i++) {
+    		if(!(i == codeindex || i == keyindex)) {
+    			translate(alphabet[i], RightShift, midshift, LeftShift, rotorsettings)
+    		}
+    		
+    	}
+
+        return plug;
 
     }
 
@@ -526,34 +565,17 @@ public class Enigma {
         return null;
     }
 
-    public static String translate(String fp, int RightShift, int midshift, int LeftShift, String[][] rotorsettings) {
-        String[] reflect = initializeRotor("YRUHQSLDPXNGOKMIEBFZCWVJAT");
-        fp = Caesar(fp, RightShift);
-        int index = index(alphabet, fp, 0);
-        fp = rotorsettings[2][index];
-        fp = Caesar(fp, RightShift * -1);
-        fp = Caesar(fp, midshift);
-        index = index(alphabet, fp, 0);
-        fp = rotorsettings[1][index];
-        fp = Caesar(fp, midshift * -1);
-        fp = Caesar(fp, LeftShift);
-        index = index(alphabet, fp, 0);
-        fp = rotorsettings[0][index];
-        fp = Caesar(fp, LeftShift * -1);
-        index = index(alphabet, fp, 0);
-        fp = reflect[index];
-        fp = Caesar(fp, LeftShift);
-        index = index(rotorsettings[0], fp, 0);
-        fp = alphabet[index];
-        fp = Caesar(fp, LeftShift * -1);
-        fp = Caesar(fp, midshift);
-        index = index(rotorsettings[1], fp, 0);
-        fp = alphabet[index];
-        fp = Caesar(fp, midshift * -1);
-        fp = Caesar(fp, RightShift);
-        index = index(rotorsettings[2], fp, 0);
-        fp = alphabet[index];
-        return fp = Caesar(fp, RightShift * -1);
+    public static boolean checkPlug(String[][] plug) {
+        for (int i = 0; i < plug.length - 1; i++) {
+            for (int j = i + 1; j < plug.length; j++) {
+                for (int j2 = 0; j2 < 2; j2++) {
+                    if (plug[i][j2].equals(plug[j][j2])) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
 }
