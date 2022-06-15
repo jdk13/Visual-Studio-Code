@@ -376,6 +376,25 @@ public class Enigma {
                                         // String[][] pairs = new String[10][2];
                                         // looking at encipher[indexes] and key[0]
                                         for (int v = 0; v < 26; v++) {
+                                            for (int vv = 0; vv < 26; vv++) {
+                                                String pair1 = alphabet[v] + alphabet[vv];
+                                                for (int vvv = 0; vvv < 26; v++) {
+                                                    for (int vvvv = 0; vvvv < 26; vvvv++) {
+                                                        for (int vvvvv = 0; vvvvv < 26; vvvvv++) {
+                                                            for (int vvvvvv = 0; vvvvvv < 26; vvvvvv++) {
+                                                                for (int vvvvvvv = 0; vvvvvv < 26; vvvvvvv++) {
+                                                                    for (int vvvvvvvv = 0; vvvvvv < 26; vvvvvvvv++) {
+
+                                                                    }
+
+                                                                }
+                                                            }
+
+                                                        }
+                                                    }
+
+                                                }
+                                            }
 
                                         }
 
