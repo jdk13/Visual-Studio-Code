@@ -372,30 +372,32 @@ public class Enigma {
                                         // KJKRVCZFIQDUDHSBCGIKVJQEMBUXWWBGOBEKMQIXFODK
                                         // COMPUTER
                                         boolean incorrect = true;
-                                        
-                                        //String[][] pairs = new String[10][2];
+
+                                        // String[][] pairs = new String[10][2];
                                         // looking at encipher[indexes] and key[0]
                                         for (int v = 0; v < 26; v++) {
-                                            
+
                                         }
 
-                                        /*for (int h = 0; h < 25; h++) {
-                                            // TRY K goes to A, B, C, D... Y, Z;
-                                            // build off of that
-                                            pairs[0][0] = encipher[ii];
-                                            if (!(h == index(alphabet, encipher[ii], 0))) {
-                                                pairs[0][1] = alphabet[h];
-                                                String output = translate(pairs[0][1], k, j, i, rotorsettings);
-                                                pairs[1][0] = output;
-                                                pairs[1][1] = key[0];
-                                                for (int t = 0; t < 10; t++) {
-                                                    for (int v = 0; v < 2; v++) {
-                                                        
-                                                    }
-                                                }
-                                            }
-
-                                        }*/
+                                        /*
+                                         * for (int h = 0; h < 25; h++) {
+                                         * // TRY K goes to A, B, C, D... Y, Z;
+                                         * // build off of that
+                                         * pairs[0][0] = encipher[ii];
+                                         * if (!(h == index(alphabet, encipher[ii], 0))) {
+                                         * pairs[0][1] = alphabet[h];
+                                         * String output = translate(pairs[0][1], k, j, i, rotorsettings);
+                                         * pairs[1][0] = output;
+                                         * pairs[1][1] = key[0];
+                                         * for (int t = 0; t < 10; t++) {
+                                         * for (int v = 0; v < 2; v++) {
+                                         * 
+                                         * }
+                                         * }
+                                         * }
+                                         * 
+                                         * }
+                                         */
 
                                     }
                                 }
