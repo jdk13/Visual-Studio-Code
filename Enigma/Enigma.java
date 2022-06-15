@@ -378,6 +378,9 @@ public class Enigma {
                                         for (int v = 0; v < 26; v++) {
                                             for (int vv = 0; vv < 26; vv++) {
                                                 String pair1 = alphabet[v] + alphabet[vv];
+                                                if (v < vv || v == vv) {
+                                                    continue;
+                                                }
                                                 for (int vvv = 0; vvv < 26; v++) {
                                                     for (int vvvv = 0; vvvv < 26; vvvv++) {
                                                         for (int vvvvv = 0; vvvvv < 26; vvvvv++) {
