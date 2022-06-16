@@ -188,6 +188,7 @@ public class Enigma {
 
     public static int index(String arr[], String t, int start) {
         // this is just a method that finds indexes
+       
 
         if (start == arr.length)
             return -1;
@@ -238,7 +239,7 @@ public class Enigma {
         String[] text = initializeRotor(code[16]);
         turn = false;
         String message = "";
-
+        boolean b = false;
         for (int i = 0; i < text.length; i++) {
             turn = false;
             shift[2]++;
@@ -252,21 +253,115 @@ public class Enigma {
             String fp = plugboard(plugboard, text[i]);
             fp = translate(fp, shift, rotorsettings);
             fp = plugboard(plugboard, fp);
+
             if (i == index2) {
                 if (!(fp.equals("C"))) {
                     print = true;
-                    break;
+                    return;
                 } else {
+
+                    print = false;
+                }
+            }
+            if (i == index2 + 1) {
+                if (!(fp.equals("O"))) {
+                    print = true;
+                    return;
+                } else {
+                    
+
+                    print = false;
+                }
+            }
+            if (i == index2 + 2) {
+                if (!(fp.equals("M"))) {
+                    print = true;
+                    return;
+                } else {
+                    
+
+                    print = false;
+                }
+            }
+            if (i == index2 + 3) {
+                if (!(fp.equals("P"))) {
+                    print = true;
+                    return;
+                } else {
+                    b = true;
+                    print = false;
+                }
+            }
+            if (i == index2 + 4) {
+                if (!(fp.equals("U"))) {
+                    print = true;
+                    return;
+                } else {
+                    
+
+                    print = false;
+                }
+            }
+            if (i == index2 + 5) {
+                if (!(fp.equals("T"))) {
+                    print = true;
+                    return;
+                } else {
+                    
+
+                    print = false;
+                }
+            }
+            if (i == index2 + 6) {
+                if (!(fp.equals("E"))) {
+                    print = true;
+                    return;
+                } else {
+                    
+
+                    print = false;
+                }
+            }
+            if (i == index2 + 7) {
+                if (!(fp.equals("R"))) {
+                    print = true;
+                    return;
+                } else {
+                    b = true;
 
                     print = false;
                 }
             }
             message += fp;
 
+            /*if (i == index2 + 1) {
+                if (!(fp.equals("O"))) {
+                    print = true;
+                    break;
+                } else {
+            
+                    print = false;
+                }
+            }
+            if (i == index2 + 2) {
+                if (!(fp.equals("M"))) {
+                    print = true;
+                    break;
+                } else {
+            
+                    print = false;
+                }
+            }
+            message += fp;
+            if (i == 43) {
+                System.out.print(message);
+            }
+            
             if (crack) {
                 for (String s : code)
                     System.out.print(" " + s);
             }
+            */
             // double steppings
             if (turnagain) {
                 shift[1]++;
@@ -291,13 +386,10 @@ public class Enigma {
             }
 
         }
-        if (message.contains("COMPUTER")) {
+        if (b) {
             System.out.print(message);
         }
-        else {
-            print = true;
-            
-        }
+        
 
         /*
          * 1. Go Plugboard
@@ -487,9 +579,14 @@ public class Enigma {
         if (index == 8) {
             return plug;
         }
+        if (shift[0] == 26) {
+            shift[0] = 0;
+        }
+        if (shift[1] == 26) {
+            shift[1] = 0;
+        }
         String[] key = initializeRotor("COMPUTER");
-        int codeindex = index(alphabet, code[index], 0); // 10
-        int keyindex = index(alphabet, key[index], 0); // 2
+         // 2
         if (output) {
 
             try {
@@ -504,7 +601,8 @@ public class Enigma {
                 shift[0]++;
                 if (shift[1] == 26) {
                     shift[1] = 0;
-                } else if (shift[0] == 26) {
+                }
+                if (shift[0] == 26) {
                     shift[0] = 0;
                 }
             }
@@ -521,7 +619,7 @@ public class Enigma {
             arrindex++;
             index++;
             String[][] testplug =  configurePlug(plug, code, remains, index, rotorsettings, notch, false, outputString, arrindex, 0);
-            if (checkPlug(plug)) {
+            if (testplug == null) {
                 return testplug;
             }
 
@@ -562,7 +660,7 @@ public class Enigma {
                                 arrindex++;
                                 String[][] testplug = configurePlug(plug, code, remains2, index, rotorsettings, notch,
                                         true, translation, arrindex, 0);
-                                if (checkPlug(plug)) {
+                                if (testplug == null) {
                                     continue;
                                 } else {
                                     return testplug;
@@ -577,16 +675,26 @@ public class Enigma {
                         } else {
                             input = translate(input, shift, rotorsettings);
                             if (checkPlug(plug, input) == -1) {
-                                return configurePlug(plug, code, remains, index, rotorsettings, notch, true,
+                                String[][] testplug =  configurePlug(plug, code, remains, index, rotorsettings, notch, true,
                                         input, arrindex, bump);
+                                if (testplug == null) {
+                                    continue;
+                                }
+                                else {
+                                    return testplug;
+                                                                            }
 
                             }
                         }
                     }
                 }
                 else {
-                    String[][] testplug = configurePlug(plug, code, remains, index, rotorsettings, notch, true,
+                    index++;
+                    String[][] testplug = configurePlug(plug, code, remains, index, rotorsettings, notch, false,
                             "", arrindex, bump);
+                            if (testplug == null) {
+                                continue;
+                            }
                     return testplug;
                 }
 
