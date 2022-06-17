@@ -1,6 +1,9 @@
 package Enigma;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 // Jacob Kim
 // AP Computer Science
 // Period 6
@@ -17,6 +20,9 @@ public class Enigma {
     static boolean quit;
     static int restart = 0;
     static boolean print = true;
+    static int[] intialshift;
+    static ArrayList<String[]> possible;
+    static int bump = 0;
 
     public static void main(String[] args) {
 
@@ -188,7 +194,6 @@ public class Enigma {
 
     public static int index(String arr[], String t, int start) {
         // this is just a method that finds indexes
-       
 
         if (start == arr.length)
             return -1;
@@ -228,7 +233,7 @@ public class Enigma {
             } catch (Exception e) {
                 break;
             }
-            
+
         }
         if (code.length > 16) {
             for (int i = 17; i < code.length; i++) {
@@ -254,7 +259,7 @@ public class Enigma {
             fp = translate(fp, shift, rotorsettings);
             fp = plugboard(plugboard, fp);
 
-            if (i == index2) {
+            if (i == 0) {
                 if (!(fp.equals("C"))) {
                     print = true;
                     return;
@@ -262,28 +267,23 @@ public class Enigma {
 
                     print = false;
                 }
-            }
-            if (i == index2 + 1) {
+            } else if (i == 1) {
                 if (!(fp.equals("O"))) {
                     print = true;
                     return;
                 } else {
-                    
 
                     print = false;
                 }
-            }
-            if (i == index2 + 2) {
+            } else if (i == 2) {
                 if (!(fp.equals("M"))) {
                     print = true;
                     return;
                 } else {
-                    
 
                     print = false;
                 }
-            }
-            if (i == index2 + 3) {
+            } else if (i == 3) {
                 if (!(fp.equals("P"))) {
                     print = true;
                     return;
@@ -291,38 +291,31 @@ public class Enigma {
                     b = true;
                     print = false;
                 }
-            }
-            if (i == index2 + 4) {
+            } else if (i == 4) {
                 if (!(fp.equals("U"))) {
                     print = true;
                     return;
                 } else {
-                    
 
                     print = false;
                 }
-            }
-            if (i == index2 + 5) {
+            } else if (i == 5) {
                 if (!(fp.equals("T"))) {
                     print = true;
                     return;
                 } else {
-                    
 
                     print = false;
                 }
-            }
-            if (i == index2 + 6) {
+            } else if (i == 6) {
                 if (!(fp.equals("E"))) {
                     print = true;
                     return;
                 } else {
-                    
 
                     print = false;
                 }
-            }
-            if (i == index2 + 7) {
+            } else if (i == 7) {
                 if (!(fp.equals("R"))) {
                     print = true;
                     return;
@@ -334,34 +327,35 @@ public class Enigma {
             }
             message += fp;
 
-            /*if (i == index2 + 1) {
-                if (!(fp.equals("O"))) {
-                    print = true;
-                    break;
-                } else {
-            
-                    print = false;
-                }
-            }
-            if (i == index2 + 2) {
-                if (!(fp.equals("M"))) {
-                    print = true;
-                    break;
-                } else {
-            
-                    print = false;
-                }
-            }
-            message += fp;
-            if (i == 43) {
-                System.out.print(message);
-            }
-            
-            if (crack) {
-                for (String s : code)
-                    System.out.print(" " + s);
-            }
-            */
+            /*
+             * if (i == index2 + 1) {
+             * if (!(fp.equals("O"))) {
+             * print = true;
+             * break;
+             * } else {
+             * 
+             * print = false;
+             * }
+             * }
+             * if (i == index2 + 2) {
+             * if (!(fp.equals("M"))) {
+             * print = true;
+             * break;
+             * } else {
+             * 
+             * print = false;
+             * }
+             * }
+             * message += fp;
+             * if (i == 43) {
+             * System.out.print(message);
+             * }
+             * 
+             * if (crack) {
+             * for (String s : code)
+             * System.out.print(" " + s);
+             * }
+             */
             // double steppings
             if (turnagain) {
                 shift[1]++;
@@ -389,7 +383,6 @@ public class Enigma {
         if (b) {
             System.out.print(message);
         }
-        
 
         /*
          * 1. Go Plugboard
@@ -464,11 +457,12 @@ public class Enigma {
         String encoded = "KJKRVCZFIQDUDHSBCGIKVJQEMBUXWWBGOBEKMQIXFODK";
         String[] encipher = initializeRotor(encoded);
         String[] key = initializeRotor("COMPUTER");
-        int[] indexes = new int[] { 0, 1, 2, 3, 4, 6, 8, 9, 10, 11, 12, 13, 14, 15, 18, 19, 20, 21, 23, 24, 25, 26, 27,
-                29, 30, 32, 33, 35 };
+        int[] indexes = new int[] { 0, 2, 3, 4, 6, 8, 9, 10, 11, 12, 13, 14, 15, 18, 19, 20, 21, 23, 24, 25, 26, 27,
+                29, 30, 32, 33 };
         String[] testcode = new String[17];
         testcode[16] = encoded;
         for (int ii : indexes) {
+            System.out.println(ii);
             for (int y = 0; y < 5; y++) {
                 for (int z = 0; z < 5; z++) {
                     for (int a = 0; a < 5; a++) {
@@ -481,13 +475,17 @@ public class Enigma {
                             for (int i = 0; i < 26; i++) {
 
                                 testcode[3] = alphabet[i];
-                                shift[0] = i;
+
                                 for (int j = 0; j < 26; j++) {
                                     testcode[4] = alphabet[j];
-                                    shift[1] = j;
+                                    possible = new ArrayList<String[]>();
+
                                     for (int k = 0; k < 26; k++) {
                                         testcode[5] = alphabet[k];
+                                        shift[0] = i;
                                         shift[2] = k;
+                                        shift[1] = j;
+                                        intialshift = shift.clone();
                                         // Assume First letter goes to something
                                         // plug that in and get other letter
                                         // KJKRVCZFIQDUDHSBCGIKVJQEMBUXWWBGOBEKMQIXFODK
@@ -496,51 +494,63 @@ public class Enigma {
                                         for (int b = 0; b < 26; b++) {
                                             remains.add(alphabet[b]);
                                         }
-                                        for (int yy = 0; yy < 26; yy++) {
+
+                                        // <ArrayList>
+                                        bump = 0;
+                                        for (int ss = 0; ss < 25; ss++) {
+                                            bump = ss;
+
                                             print = true;
-                                            
+
                                             String[][] pairs = new String[10][2];
-                                            boolean incorrect = true;
                                             pairs = configurePlug(pairs, initializeRotor(encoded.substring(ii, ii + 8)),
-                                                    remains, 0, rotorsettings, notches, false, "", 0, yy);
-                                            
-                                            // <ArrayList>
+                                                    remains, 0, rotorsettings, notches, false, "", 0);
+                                            if (pairs == null) {
+                                                continue;
+                                            }
+                                            testcode[16] = encoded.substring(ii);
                                             if (!(pairs[9][1] == null)) {
+
+                                                testcode[6] = pairs[0][0] + pairs[0][1];
+                                                testcode[7] = pairs[1][0] + pairs[1][1];
+                                                testcode[8] = pairs[2][0] + pairs[2][1];
+                                                testcode[9] = pairs[3][0] + pairs[3][1];
+                                                testcode[10] = pairs[4][0] + pairs[4][1];
+                                                testcode[11] = pairs[5][0] + pairs[5][1];
+                                                testcode[12] = pairs[6][0] + pairs[6][1];
+                                                testcode[13] = pairs[7][0] + pairs[7][1];
+                                                testcode[14] = pairs[8][0] + pairs[8][1];
+                                                testcode[15] = pairs[9][0] + pairs[9][1];
+
                                                 whole(testcode, false, ii);
                                                 if (!print) {
-                                                    
+
                                                     System.out.print(" ");
                                                     System.out.print(ii + " " + testcode[0] + " " + testcode[1] + " "
                                                             + testcode[2] + " " + testcode[3] + " " + testcode[4] + " "
                                                             + testcode[5] + " ");
                                                     for (int pp = 0; pp < pairs.length; pp++) {
-                                                        String temp = "";
+
                                                         for (int qq = 0; qq < 2; qq++) {
                                                             if (pairs[pp][qq] != null) {
                                                                 System.out.print(pairs[pp][qq]);
-                                                                temp += pairs[pp][qq];
+
                                                             }
 
                                                         }
-                                                        testcode[6 + pp] = temp;
+
                                                         System.out.print(" ");
                                                     }
                                                     System.out.println(" ");
                                                 }
-                                                
-                                                
-                                                
+
                                             }
+
+                                            // configureplug(pairs, remain);
+
+                                            // String[][] pairs = new String[10][2];
+                                            // looking at encipher[indexes] and key[0]
                                         }
-                                        
-                                        
-
-                                        
-                                        // configureplug(pairs, remain);
-
-                                        // String[][] pairs = new String[10][2];
-                                        // looking at encipher[indexes] and key[0]
-
                                     }
                                 }
                             }
@@ -564,6 +574,7 @@ public class Enigma {
         // loop through plugboards
 
     }
+
     // FIRST ITERATION
     // K ---> ?
     // loop A - Z and null
@@ -572,8 +583,11 @@ public class Enigma {
     // if any are
 
     private static String[][] configurePlug(String[][] plug, String[] code, ArrayList<String> remains, int index,
-            String[][] rotorsettings, int[] notch, boolean output, String outputString, int arrindex, int bump) {
-        restart = -2;
+            String[][] rotorsettings, int[] notch, boolean output, String outputString, int arrindex) {
+        if (plug[9][1] != null) {
+            return plug;
+        }
+
         // this index covers for arrays, and another index will call this method to
         // determine the parts of the code it will use
         if (index == 8) {
@@ -586,15 +600,15 @@ public class Enigma {
             shift[1] = 0;
         }
         String[] key = initializeRotor("COMPUTER");
-         // 2
+        // 2
         if (output) {
 
             try {
                 plug[arrindex][0] = remains.remove(remains.indexOf(outputString));
                 plug[arrindex][1] = remains.remove(remains.indexOf(key[index]));
             } catch (Exception e) {
-                restart = index;
-                return plug;
+
+                return null;
             }
             if (turnagain) {
                 shift[1]++;
@@ -618,9 +632,10 @@ public class Enigma {
             }
             arrindex++;
             index++;
-            String[][] testplug =  configurePlug(plug, code, remains, index, rotorsettings, notch, false, outputString, arrindex, 0);
+            String[][] testplug = configurePlug(plug, code, remains, index, rotorsettings, notch, false, outputString,
+                    arrindex);
             if (testplug == null) {
-                return testplug;
+                return null;
             }
 
         } else {
@@ -637,12 +652,14 @@ public class Enigma {
             }
             int realsize = remains.size(); // K goes into plug[][] size = 26
             for (int i = 0; i < realsize + 1; i++) {
-                if (i == 0 && bump != 0) {
-                    i += bump;
+                if (index == 0 && i == bump) {
+                    continue;
                 }
+
                 if (!(i == realsize)) {
                     // K
                     // C
+
                     if (!(remains.get(i).equals(code[index]) || remains.get(i).equals(key[index]))) {
                         String input = plugboard(plug, code[index]);
                         if (input.equals(code[index])) { // if not plugboard existing
@@ -653,53 +670,152 @@ public class Enigma {
                                 try {
                                     plug[arrindex][0] = remains2.remove(remains2.indexOf(code[index]));
                                     plug[arrindex][1] = remains2.remove(i);
+                                    if (checkPlug(plug, translation) != -1) {
+                                        if (index == 0) {
+                                            for (int e = 0; e < plug.length; e++) {
+                                                Arrays.fill(plug[e], null);
+                                            }
+
+                                            arrindex = 0;
+                                            shift = intialshift.clone();
+                                            remains.clear();
+                                            for (int b = 0; b < 26; b++) {
+                                                remains.add(alphabet[b]);
+                                            }
+
+                                            continue;
+                                        } else {
+
+                                            return null;
+                                        }
+                                    } else {
+
+                                        arrindex++;
+
+                                        String[][] testplug = configurePlug(plug, code, remains2, index, rotorsettings,
+                                                notch, true, translation, arrindex);
+                                        if (testplug == null) {
+                                            if (index == 0) {
+                                                for (int e = 0; e < plug.length; e++) {
+                                                    Arrays.fill(plug[e], null);
+                                                }
+                                                arrindex = 0;
+                                                shift = intialshift.clone();
+                                                remains.clear();
+                                                for (int b = 0; b < 26; b++) {
+                                                    remains.add(alphabet[b]);
+                                                }
+
+                                                continue;
+                                            } else {
+
+                                                return null;
+                                            }
+                                        }
+                                    }
+
                                 } catch (Exception e) {
-                                    restart = index;
-                                    return plug;
+                                    if (index == 0) {
+                                        continue;
+                                    }
+
+                                    return null;
                                 }
                                 arrindex++;
                                 String[][] testplug = configurePlug(plug, code, remains2, index, rotorsettings, notch,
-                                        true, translation, arrindex, 0);
+                                        true, translation, arrindex);
                                 if (testplug == null) {
-                                    continue;
+
+                                    if (index == 0) {
+                                        for (int e = 0; e < plug.length; e++) {
+                                            Arrays.fill(plug[e], null);
+                                        }
+                                        arrindex = 0;
+                                        shift = intialshift.clone();
+                                        remains.clear();
+                                        for (int b = 0; b < 26; b++) {
+                                            remains.add(alphabet[b]);
+                                        }
+
+                                        continue;
+                                    } else {
+
+                                        return null;
+                                    }
                                 } else {
                                     return testplug;
                                 }
 
                                 // plug = configurePlug(plug, code, remains2, index, rotorsettings, notch);
                             } else {
-                                continue;
+
+                                return null;
 
                             }
 
-                        } else {
+                        } else { // this is for if the plugboard already exists
                             input = translate(input, shift, rotorsettings);
                             if (checkPlug(plug, input) == -1) {
-                                String[][] testplug =  configurePlug(plug, code, remains, index, rotorsettings, notch, true,
-                                        input, arrindex, bump);
+                                String[][] testplug = configurePlug(plug, code, remains, index, rotorsettings, notch,
+                                        true,
+                                        input, arrindex);
                                 if (testplug == null) {
-                                    continue;
-                                }
-                                else {
-                                    return testplug;
-                                                                            }
+                                    if (index == 0) {
+                                        for (int e = 0; e < plug.length; e++) {
+                                            Arrays.fill(plug[e], null);
+                                        }
+                                        arrindex = 0;
+                                        shift = intialshift.clone();
+                                        remains.clear();
+                                        for (int b = 0; b < 26; b++) {
+                                            remains.add(alphabet[b]);
+                                        }
 
+                                        continue;
+                                    } else {
+
+                                        return null;
+                                    }
+
+                                } else {
+                                    return testplug;
+                                }
+
+                            } else {
+                                return null;
                             }
                         }
                     }
-                }
-                else {
+
+                } else {
                     index++;
                     String[][] testplug = configurePlug(plug, code, remains, index, rotorsettings, notch, false,
-                            "", arrindex, bump);
-                            if (testplug == null) {
-                                continue;
+                            "", arrindex);
+                    if (testplug == null) {
+
+                        if (index == 0) {
+                            for (int e = 0; e < plug.length; e++) {
+                                Arrays.fill(plug[e], null);
                             }
-                    return testplug;
+                            arrindex = 0;
+                            shift = intialshift.clone();
+                            remains.clear();
+                            for (int b = 0; b < 26; b++) {
+                                remains.add(alphabet[b]);
+                            }
+
+                            continue;
+                        } else {
+
+                            return null;
+                        }
+                    } else {
+                        return testplug;
+                    }
                 }
 
             }
-            
+
         }
 
         // code - KJKRVCZF
@@ -724,7 +840,7 @@ public class Enigma {
     }
 
     public static String plugboard(String[][] plugboard, String a) {
-        
+
         for (String[] first : plugboard) {
             if (a.equalsIgnoreCase(first[0])) {
                 if (first[1] == "") {
@@ -809,7 +925,7 @@ public class Enigma {
         for (int i = 0; i < plug.length - 1; i++) {
             for (int j2 = 0; j2 < 2; j2++) {
                 if (!(plug[i][j2] == null)) {
-                    if (plug[i][j2].equals(input)) {
+                    if (plug[i][j2].equalsIgnoreCase(input)) {
                         return i;
                     }
                 }
@@ -818,21 +934,22 @@ public class Enigma {
         }
         return -1;
     }
-    
+
     public static boolean checkPlug(String[][] plug) {
         for (int i = 0; i < plug.length - 1; i++) {
-            for (int j = i+1; j < plug.length; j++) {
-                for (int j2 = 0; j2 < 2; j2++) {
-                    if (!(plug[i][j2] == null)) {
-                        if (plug[i][j2].equals(plug[j][j2])) {
-                            return true;
-                        }
+            for (int j = i + 1; j < plug.length; j++) {
+                if (!(plug[i] == null)) {
+                    if (!equals(plug[i], plug[j])) {
+                        return true;
                     }
-
                 }
             }
         }
         return false;
+    }
+
+    public static boolean equals(String[] o, String[] a) {
+        return (o[0] == a[0] && o[1] == a[1]) || (o[1] == a[0] && o[0] == a[1]);
     }
 
 }
