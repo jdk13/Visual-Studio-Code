@@ -497,8 +497,8 @@ public class Enigma {
 
                                         // <ArrayList>
                                         bump = 0;
-                                        for (int ss = 0; ss < 25; ss++) {
-                                            bump = ss;
+                                        //for (int ss = -1; ss < 25; ss++) {
+                                            //bump = ss;
 
                                             print = true;
 
@@ -544,7 +544,7 @@ public class Enigma {
                                                     System.out.println(" ");
                                                 }
 
-                                            }
+                                            //}
 
                                             // configureplug(pairs, remain);
 
@@ -652,11 +652,12 @@ public class Enigma {
             }
             int realsize = remains.size(); // K goes into plug[][] size = 26
             for (int i = 0; i < realsize + 1; i++) {
-                if (index == 0 && i == bump) {
-                    continue;
-                }
+                
 
                 if (!(i == realsize)) {
+                    if (remains.get(i).equals("A") && index == 0) {
+                        continue;
+                    }
                     // K
                     // C
 
